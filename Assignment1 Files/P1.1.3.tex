@@ -1,0 +1,70 @@
+To show that $R_n$ is a subgroup of $R^*$, we first show that $R_n$ is a subset or $R^*$ and then verify the group axioms. Let $\omega \in R_n$, then by definition we have $\omega^n = \omega \cdot \omega^{n-1} = 1$. So, $\omega$ is an invertible element of $R$. Hence, $\omega \in R^*$ and $R_n\subseteq R^*$.
+
+
+\begin{itemize}
+    \item \textbf{Closure: } Let $\omega, \psi \in R_n$, then $(\omega\cdot\psi)^n = \omega^n\cdot\psi^n = 1\cdot 1 = 1$. So, $\omega\cdot\psi \in R_n$ and hence $R_n$ is closed under multiplication. 
+
+    \item \textbf{Associativity: } Follows from associativity of operation $\cdot$ in $R^*$.
+
+    \item \textbf{Identity: } $1$ is an $n$-th root of unity since $1^n = 1$. Therefore $R_n$ contains the identity element.
+    \item \textbf{Inverse: }  For every $\omega\in R_n$, $(\omega^{-1})^n = (\omega^n)^{-1}=1^{-1} = 1$. Hence, $\omega^{-1}\in R_n$ and so every element in $R_n$ has an inverse.
+\end{itemize}
+
+Therefore, $R_n$ is a subgroup of $R$.
+
+To show the 4 statements are equivalent, we will show that $(a) \iff (d)$ and $(d) \Rightarrow (c) \Rightarrow (b) \Rightarrow (d)$
+\subsubsection*{$(a) \iff (d)$}
+Assume statement (a) is true. Then, $\omega \in R$ is an $n^{th}$ primitive root of unity. i.e., 
+\[
+\omega^n = 1 \text{ and } \forall \text{ prime divisor p of n: } \omega^{n/p} - 1 \text{ is neither zero nor a zero divisor. }
+\]
+If $ \omega^{n/p} = 1$, $\omega^{n/p}-1 = 0$ . Thus, $ \omega^{n/p} \ne 1$ and $(a) \Rightarrow (d)$
+
+Now, assume statement (d) is true, i.e., $\omega \in R: \omega^n = 1 \text{ and } \forall \text{ prime divisor p of n: } \omega^{n/p} \ne 1 $.
+
+Since R is an integral domain, $\omega^{n/p} - 1 (\ne 0)$ is not a zero divisor. Hence, $\omega$ is an $n^{th}$ primitive root of unity. Therefore, $(a) \iff (d)$.
+
+\subsubsection*{$(d) \Rightarrow (c)$}
+
+Let $\omega \in R$ such that $\forall \text{ prime divisor p of n: } \omega^{n/p} \ne 1$.
+
+Let $l \in \mathbb{Z}^+$ such that $ 0 < l < n \text{ and } l | n$. Then, $\exists k \in \mathbb{Z}^+ $ such that $n = lk$.
+
+Since $l < n$, $k > 1$, $\exists k' \in \mathbb{Z}^+: k = k'p$ for some prime factor p of k (and thus of n since k | n). 
+
+Consider the expression:
+\begin{align*}
+    (\omega^l - 1) \sum_{0 \le i < k'} \omega^{li} &= \sum{1 \le i \le k'} \omega^{li} - \sum{0 \le i < k'} \omega^{li} \\
+    &= \omega^{lk'} - 1 \\
+    &= \omega^{n/p} - 1
+\end{align*}
+
+By statement (d),  $\omega^{n/p} - 1 \ne 0$
+$ \Rightarrow(\omega^l - 1) \ne 0 \Rightarrow \omega^l \ne 1$. Hence $(d) \Rightarrow (c)$.
+
+\subsubsection*{$(c) \Rightarrow (b)$}
+
+Let $\omega \in R$ such that $\forall l' \in \mathbb{Z}^+, 0 < l' < n: l' | n \Rightarrow \omega^{l'} \ne 1$ 
+
+and $l \in \mathbb{Z}^+$ such that $ 0 < l < n$. Moreover, let $ g = \text{gcd}(l, n)$.
+
+Then, $g | n$ and $0 < g < n$. Thus $\omega^g \ne 1$. Assume towards contradiction that $\omega^l = 1$.
+
+From Bezout's Lemma, there exist $r,s\in \Z$ such that $rl + sn = g$. Thus,
+
+\[
+\omega^g = \omega^{rl + sn} = \left(\omega^l\right)^{r}\left(\omega^n\right)^{s} = 1
+\]
+
+Which is a contradiction. Thus, $\omega^l \ne 1$ and $(c) \Rightarrow (b)$.
+
+\subsubsection*{$(b) \Rightarrow (d)$}
+
+This is trivial, since: 
+\[
+\forall 0 < l < n: \omega^l \ne 1 \Rightarrow \forall \text{ prime factors p of n: } \omega^l \ne 1
+\]
+
+Since any prime factor of n obeys $0 < p < n$.
+
+Hence, the 4 statements are equivalent.

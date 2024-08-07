@@ -1,0 +1,74 @@
+The Möbius function $\mu(n)$ is defined for $n\geq 1$ by :
+\[\mu(n) := \begin{cases}1 & \text{if $n=1$} \\
+0 & \text{if $n$ is not squarefree} \\
+(-1)^r & \text{if $n$ is the product of $r$ distinct primes.}
+\end{cases}\]
+
+% We'll start by proving certain lemmas regarding the Möbius function.
+
+% \begin{thisnote1}
+%     \textbf{Lemma 1} : If $\gcd(m,n) = 1$, then $\mu(mn) = \mu(m)\mu(n)$.
+
+%     \textit{Proof.} If either $m$ or $n$ were $1$, then the proposition is clearly true. Suppose $m,n>1$. If either $m$ or $n$ is not square free, then $mn$ will not be square free. So $\mu(mn) = 0 = \mu(m)\mu(n)$. Let $m,n>1$ be squarefree. Let $m = \prod_{i=1}^{r_{m}} p_i$ and $n = \prod_{j=1}^{r_n} q_j$. Since $\gcd(m,n) = 1$, $p_i\neq q_j$ for all $i,j$. We have $\mu(m) = (-1)^{r_m}$ and $\mu(n) = (-1)^{r_n}$ and $\mu(mn) = (-1)^{r_m+r_n}$. Thereforefore, $\mu(mn) = \mu(m)\mu(n)$. \hfill $\square$
+% \end{thisnote1}
+
+% \begin{thisnote1}
+%     \textbf{Lemma 2} : $\sum_{d\mid n} \mu(d) = \begin{cases} 1 & \text{if $n=1$} \\ 0 & \text{if $n\geq 2$.} \end{cases} = \lfloor \frac{1}{n}\rfloor.$
+
+%     \textit{Proof.} If $n=1$, then the sum is clearly $1$. Let $n=\prod_{i=1}^r p_r^{\nu_r} > 1$. The contribution of divisors which are not square free, to this sum is $0$. Therefore we only have to consider the divisors of $n$ which are products of distinct primes from $\mathscr{P} = \{p_1,\ldots, p_r\}$. Let $\mathscr{D}_s$ be the set of divisors of $n$ which are product of $s$ distinct primes from $\mathscr{P}$. We can now simplify the sum as follows :
+%     \begin{align*}
+%         \sum_{d\mid n} \mu(d) &= \mu(1) + \sum_{\substack{d\mid n \\ d\ \text{is not square free}}}\mu(d) + \sum_{\substack{d\mid n \\ d\ \text{is square free}}} \mu(d) \\
+%         &= 1 + \sum_{\substack{d\mid n \\ d\ \text{is not square free}}} 0 + \sum_{\substack{d\mid n \\ d\ \text{is square free}}} \mu(d) \\
+%         &= 1 + \sum_{\substack{d\mid n \\ d\ \text{is square free}}} \mu(d) = 1 + \sum_{s=1}^r \sum_{d\in \mathscr{D}_s} \mu(d) \\
+%         &= 1 + \sum_{s=1}^r \sum_{d\in \mathscr{D}_s} (-1)^s = 1 + \sum_{s=1}^r (-1)^s|\mathscr{D}_s| = 1 + \sum_{s=1}^r (-1)^s \binom{r}{s} \\
+%         &= \sum_{s=0}^r (-1)^s \binom{r}{s} = (1-1)^r = 0.  
+%     \end{align*}
+%     This completes the proof. \hfill $\square$
+% \end{thisnote1}
+
+\begin{thisnote}
+    \textbf{Proposition 1} Suppose $f,g :\N\to \R$ such that $f(n) = \sum_{d\mid n} g(d)$. Then :
+    \[g(n) = \sum_{d\mid n} f(n)\mu(n/d).\]
+    \textbf{Proposition 2} $X^{p^r}-X$ is the product of all monic irreducible polynomials in $\mathbb{F}_p[X]$ of degree $d$, for all $d$ dividing $r$.
+\end{thisnote}
+
+We will take these two propositions as facts and won't prove them.
+
+Let $\eta(d)$ denote the number of irreducible polynomials of degree $d$, where $d\mid r$. From proposition $2$, we can write :
+\[X^{p^r} - X = \prod_{\substack{\text{$\gamma$ monic, irred.}\\ \deg{\gamma}|r}}\gamma(X) = \prod_{d\mid r}\prod_{i=1}^{\eta(d)} \gamma_{d,i}(X),\]
+where $\gamma_{d,i}$ is the $i$-th irreducible polynomial of degree $d$. 
+Hence,
+\[\deg(X^{p^r}-X) = \sum_{d\mid r}\sum_{r=1}^{\eta(d)} \deg(\gamma_{d,i}(X)).\]
+Therefore,
+\[p^r = \sum_{d\mid r}\sum_{r=1}^{\eta(d)} d = \sum_{d\mid r} d\eta(d). \tag{$\star$}\]
+We find that :
+\[\eta(r) \leq \frac{p^r}{r}.\]
+Let $f(n)=p^n$ and $g(d) = d\eta(d)$, and applying proposition $1$, we get :
+\[r\eta(r) = \sum_{d\mid r} \mu\left(\frac{r}{d}\right)p^d.\]
+Dividing both sides by $r$, we get $\eta(r) = \frac{1}{r}\sum_{d\mid r}\mu\left(\frac{r}{d}\right)p^d = \frac{p^r}{r}(1 + \sum_{d\mid r, d\neq r}\mu\left(\frac{r}{d}\right)p^{d-r})$.
+Therefore, 
+\begin{align*}
+    \eta(r) &= \sum_{d\mid r} \mu\left(\frac{r}{d}\right)p^d = \frac{p^r}{r}\left(1 - \left(-\sum_{d\mid r, d\neq r}\mu\left(\frac{r}{d}\right)p^{d-r}\right)\right)
+\end{align*}
+
+\begin{thisnote1}
+\textbf{Claim} : -$\sum_{d\mid r, d\neq r}\mu\left(\frac{r}{d}\right)p^{d-r} \sim o(1)$.
+
+\textit{Proof.} From $(\star)$, we get :
+\begin{align*}
+    p^r = \sum_{d\mid r}d\eta(d) = r\eta(r) + \sum_{d\mid r, d<r}d\eta(d) \leq r\eta(r) + \sum_{d\leq \frac{r}{2}}d\eta(d) 
+    \leq r\eta(r) + \sum_{d\leq \frac{r}{2}}p^{d} = r\eta(r) + \dfrac{p^{r/2+1}-1}{p-1}
+\end{align*}
+Hence, $r\eta(r) \geq p^r - \frac{p^{r/2+1}-1}{p-1}\geq p^r - 2p^{r/2}$. Therefore, we get :
+\begin{gather*}
+    \dfrac{p^r - 2p^{r/2}}{r}\leq \eta(r) \leq \dfrac{p^r}{r} \implies -2p^{-r/2}\leq \dfrac{r\eta(r)}{p^r}-1 \leq 0  \implies 0\leq-\sum_{d\mid r, d\neq r}\mu\left(\frac{r}{d}\right)p^{d-r}\leq 2p^{-r/2}
+\end{gather*}
+By Sandwich Theorem we get :
+\[\lim_{r\to\infty}-\sum_{d\mid r, d\neq r}\mu\left(\frac{r}{d}\right)p^{d-r} = 0.\]
+\hfill $\square$
+\end{thisnote1}
+
+
+
+Therefore, 
+\[\eta(r) = \frac{p^r}{r}(1-o(1)).\] \hfill $\blacksquare$

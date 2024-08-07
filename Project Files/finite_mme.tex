@@ -1,0 +1,76 @@
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+
+\begin{frame}{Preliminaries - CRT}
+    \begin{block}
+        {Lemma}
+        \textbf{Fast CRT Modulation Computation [GG13]: } There is an algorithm that when given as input coprime positive integeres $p_1, \cdots p_r$ and a positive integer $N < \Pi p_i < 2^c$ computes the remainders $a_i \equiv N \text{ mod } p_i$ in $\Tilde{O}(c)$ time
+    \end{block}
+
+    \begin{block}
+        {Lemma}
+        \textbf{Fast CRT Reconstruction [GG13]: } There is an algorithm that when given input coprime positive integers $p_1, \cdots p_r$ and $a_1 \cdots a_r$ such that $0 \le a_i < p_i$ outputs the unique integer $0 \le N < \Pi p_i < 2^c$ such that $N \equiv a_i \text{ mod } p_i$ in $\Tilde{O}(c)$ time.
+    \end{block}
+
+    \blfootnote{[GG13]: Joachim Von Zur Gathen and Jurgen Gerhard: Modern Computer Algebra}
+\end{frame}
+
+\begin{frame}{Preliminaries - Kronecker Map}
+    \begin{block}
+        {Definition}
+        \textbf{Kronecker Map: } The c-variate Kronecker Map for base-d denoted by $\Phi_{d,m;c}$ maps cm-variate polynomials into a c-variate polynomials via:
+        \[
+        \Phi_{d,m;c}\left(f(x_{11}, \cdots x_{1m}, \cdots x_{cm})\right) = f(1, y_1^d, y_1^{d^2} \cdots y_1^{d^{m-1}}, \cdots y_c^{d^{m-1}})
+        \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Frame Title}
+    \begin{block}
+    {Theorem}
+        Given m-variate polynomial $f \in \F_p[x_1, \cdots x_m]$ with degree at most d-1 in each variable and $\alpha_1 \cdots \alpha_{N-1}$, then there exists a deterministic algorithm that outputs $f(\alph_i)$ in time: \[O\left(m(d^m + p^m + N) poly(\log p)\right)\]
+    \end{block}
+
+    \begin{block}
+        {Proof}
+        \begin{enumerate}
+            \item Compute the reduction $\overline{f}$ of $f$ modulo $x_j^p - x$
+            \item Use an FFT to compute $\overline{f}(\alpha)$ for all $\alpha \in \F_p^m$
+            \item Look up and return $f(\alpha_i)$
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{MME Algorithm over Finite Fields}
+    \tiny{\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$f(x_1,\ldots, x_n)\in\F_p[x_1,\ldots,x_n]$ and $\mathbf{a}^{(1)},\ldots, \mathbf{a}^{(N)}\in \F_p^N$}
+    \KwResult{$b_i = f(\mathbf{a}^{(i)})$ for $i\in [N]$.}
+        Adjust d and m such that $\log \log d \le m \le d^{o(1)}$
+        Let $\Tilde{L} = (dm + 1) log p + m log d$. Compute first $\Tilde{L}$ prime numbers $\{p_1, \cdots p_{\Tilde{L}}\}$ \\
+        Let $L\leq s$ be the smallest integer such that $p_1\cdots p_L =: M > d^m \cdot p^{dm+1}$ \\
+        \For{$e\in \{0,\ldots, d-1\}^m$}{
+            Compute $f_e^{(l)} = f_e \bmod{p_l}$ for $l\in L$.
+        }
+        \For{$i\in [N], k\in [m]$}{
+            Compute $a_{i,k,l} = \mathbf{a}_k^{(l)}\bmod p_l$ for $l\in L$.
+        }
+        \For{$l\in [L]$}{
+            Let $f^{(l)}(x_1,\ldots, x_m) = \sum_\mathbf{e}f_{\mathbf{e}}^{(l)}\mathbf{x}^{\mathbf{e}}\in \mathbb{F}_{p_l}[\mathbf{x}]$.\\
+            Let $\mathbf{a}^{(i,l)}=(a_{i,1,l},\ldots, a_{i,m,l})\in \mathbb{F}_{p_l}^m$ for each $i\in [N]$.\\
+            Compute $f_{(l)}(\alpha)$ for all $\alpha \in \F_p^m$ \\
+            Look up and store $f^{(l)}(a^{(i, l)})$
+        }
+        \For{$i\in [N]$}
+        {
+            Compute the unique $b_i\in [-M/2, M/2]$ such that $b_i = b_{i,l} \bmod{p_l}$ for all $l\in [L]$.
+        }
+        \KwRet{$\{b_i : i\in [N]\}$}\;
+    \caption{\textsc{MME-Finite-Field}}
+\end{algorithm}}
+\end{frame}

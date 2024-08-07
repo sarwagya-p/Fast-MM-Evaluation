@@ -1,0 +1,93 @@
+Let $B = [b_1 | b_2 \cdots | b_n]$ be a $\frac{3}{4}$-reduced LLL Basis, and let $\Tilde{B} = [\Tilde{b_1} | \Tilde{b_2} | \cdots \Tilde{b_n} ]$ be the GSO vectors of $B$. Then we have the following conditions:
+
+\begin{itemize}
+    \item $\Tilde{b_1} = b_1$
+    \item $\exists \mu_{ij}: \forall i: \Tilde{b_i} = b_i - \sum_{j < i} \mu_{ij} \Tilde{b_j}$
+    \item $\lvert \mu_{ij} \rvert \le 1 \fracslash 2$
+    \item $\frac{3}{4} \lVert \Tilde{b_i} \rVert^2 \le \lVert \mu_{i,i+1} \Tilde{b_i} + \Tilde{b}_{i+1} \rVert^2$
+\end{itemize}
+
+We can derive the following inequality, which is useful in all parts:
+
+\begin{thisnote1}
+    \textbf{Claim 1 :}$\forall i>j: \lVert \Tilde{b_j} \rVert \le 2^{(i-j)\fracslash 2} \lVert \Tilde{b_i} \rVert$.
+    
+    \textit{Proof}. We note that for all $i$ : 
+    \begin{gather*}
+    \frac{3}{4} \lVert \Tilde{b_i} \rVert^2 \le \lVert \mu_{i,i+1} \Tilde{b_i} + \Tilde{b}_{i+1} \rVert^2 \le \lvert \mu_{i,i+1} \rvert^2 \lVert \Tilde{b_i} \rVert^2 + \lVert \Tilde{b}_{i+1} \rVert^2  \le  \frac{1}{4} \lVert \Tilde{b_i} \rVert^2 + \lVert \Tilde{b}_{i+1} \rVert^2 \implies \lVert \Tilde{b_i} \rVert \le  2^{1 \fracslash 2} \lVert \Tilde{b}_{i+1} \rVert
+\end{gather*}
+Therefore, 
+\[
+\forall i>j: \lVert \Tilde{b_j} \rVert \le 2^{1 \fracslash 2} \lVert \Tilde{b}_{j+1} \rVert \le 2^{2 \fracslash 2} \lVert \Tilde{b}_{j+3} \rVert \cdots \le 2^{(i-j) \fracslash 2} \lVert \Tilde{b_i} \rVert
+\]
+\hfill $\blacksquare$
+\end{thisnote1}
+
+\begin{thisnote1}
+    \textbf{Claim 2 : } $\forall 1 \le j \le i \le n: \lVert b_j \rVert \le 2^{(i-1) \fracslash 2} \lVert \Tilde{b}_i \rVert$.
+
+    \textit{Proof}. 
+    \begin{align*}
+    \lVert b_j \rVert^2 &= \lVert \Tilde{b_j} - \sum_{k = 1}^{j-1} \mu_{ij} \Tilde{b_k} \rVert^2 \le \lVert \Tilde{b_j} \rVert^2 + \frac{1}{4} \sum_{k = 1}^{j-1} \lVert \Tilde{b_j} \rVert^2 \\
+    &\le \left(2^{i-j} + \frac{1}{4}\sum_{k = 1}^{j-1} 2^{i-k}\right) \lVert \Tilde{b_i} \rVert^2 \le \left(2^{i-j} + \frac{1}{4} \left(2^i - 2^{i-j+1}\right)\right) \lVert \Tilde{b_i} \rVert^2 \\
+    &\le \left(2^{i-j} - 2^{i-j-1} + 2^{i-2}\right) \lVert \Tilde{b_i} \rVert^2 \le \left(2^{i-j-1} + 2^{i-2}\right) \lVert \Tilde{b_i} \rVert^2 \\
+    &\le \left(2^{i-2} + 2^{i-2}\right) \lVert \Tilde{b_i} \rVert^2 \\
+    &\le 2^{i-1} \lVert \Tilde{b_i} \rVert^2
+\end{align*}
+
+\hfill $\blacksquare$
+\end{thisnote1}
+
+\subsubsection{Part (a)}
+
+\textbf{To Prove: } $\lVert b_1 \rVert \le 2^{(n-1)\fracslash 4} \det(\mathcal{L})^{1/n}$
+
+\textbf{Proof: } We know that:
+
+\begin{align*}
+    \det(\mathcal{L}) &= \prod_{i=1}^n \lVert \Tilde{b_i} \rVert \\
+    &\ge \prod_{i=1}^n 2^{-(i-1) \fracslash 2} \lVert \Tilde{b_1} \rVert \tag{from Claim 1} \\
+    &= \lVert \Tilde{b_1} \rVert^n \prod_{i=1}^n 2^{-(i-1) \fracslash 2} \\ 
+    &= \lVert \Tilde{b_1} \rVert^n 2^{\sum_{i=1}^n -(i-1) \fracslash 2} \\
+    &= \lVert \Tilde{b_1} \rVert^n 2^{-n(n-1) \fracslash 4} \\
+    \Rightarrow \lVert \Tilde{b_1} \rVert &\le 2^{(n-1) \fracslash 4}\det(\mathcal{L})^{1 \fracslash n}
+\end{align*}
+\hfill$\blacksquare$
+\subsubsection{Part (b)}
+Consider the set of i linearly independant vectors $\{b_1, b_2 \cdots b_i\}$ $\in \mathcal{L}$. By Claim 2, we have:
+
+$\forall j \le i: \lVert b_j \rVert \le 2^{(i-1) \fracslash 2} \lVert \Tilde{b}_i \rVert$
+
+Therefore,
+\begin{align*}
+\lambda_i(\mathcal{L}) \le \max_{1\leq j\leq i} \lVert b_j \rVert \\
+\Rightarrow \lambda_i(\mathcal{L}) \le 2^{(i-1) \fracslash 2} \lVert \Tilde{b}_i \rVert
+\end{align*}
+\hfill$\blacksquare$
+
+\subsubsection{Part (c)}
+
+Let $v_1, v_2 \cdots v_i$ be a set of shortest linearly independant vectors.
+
+Let $v_i = \sum \alpha_i b_i = \sum \beta_i \Tilde{b_i}$ for some $\alpha_i \in \Z, \beta_i \in \R$. Then, by definition of GSO, we have:
+
+\[
+\forall i: \beta_i = \alpha_i + \sum_{j=i+1}^n \mu_{ij} \alpha_j
+\]
+
+We claim that $\exists k: $ last non zero coefficient $\alpha$ of $v_k \ge i$. If not, then,
+all of $v_1, v_2 \cdots v_i \in span(b_1, b_2 \cdots b_{i-1}) \Rightarrow dim(span(v_1, v_2 \cdots v_i)) < i$ which is a contradiction. 
+Thus, let $k^*$ be the index of the last non zero coefficient of $\alpha$. Then,
+
+\begin{align*}
+    \beta_{k^*} &= \alpha_{k^*} + \sum_{j = k^* + 1}^n \mu_{ij} \alpha_j \\
+    &= \alpha_{k^*} \in \Z \textbackslash \{0\} \\
+    \Rightarrow \lvert \beta_{k^*} \rvert &\ge 1 \\
+    \Rightarrow \lVert v_i \rVert &\ge \lvert \beta_{k^*} \rvert \lVert b_{k^*} \rVert \\
+    &\ge \lVert b_{k^*} \rVert \\
+    &\ge \lVert \Tilde{b_{k^*}} \rVert \\
+    &\ge 2^{-(k^*-1) \fracslash 2} \lVert b_i \rVert \tag{by Claim 2}\\
+    &\ge 2^{-(n-1) \fracslash 2} \lVert b_i \rVert.
+\end{align*}
+
+\hfill$\blacksquare$

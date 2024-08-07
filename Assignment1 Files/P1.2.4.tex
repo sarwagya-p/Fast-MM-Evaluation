@@ -1,0 +1,101 @@
+First, we claim that for any $l(>t)$ bit integer $z \in \Z$, we can get a t ($>0$) bit floating point approximation of $z$ by rounding to the nearest multiple of $2^{l-t}$ such that:
+
+\[
+\hat{z} = a \cdot 2^e, a, e \in \Z,  \log_2{|a|} = t \text{ such that } \exists \epsilon: \hat{z} = (1+\epsilon)z, |\epsilon| \le 2^{-t} 
+\]
+
+Note that error is $2^{-t}$ instead of $2^{-t+1}$, since we have the extra flexibility of rounding up or down. The error bound can be proven as:
+
+Let $z = b_{l-1}b_{l-2} \cdots b_1 b_0$, where $\forall i: b_i \in \Z_2$ and $b_0$ is LSB.
+
+Define \(\hat{z} =a 2^e, \text{ where } a = b_{l-1}b_{l-2} \cdots b_{l-t} + b_{l-t-1} \text{ and } e = l-t\) (Note: in the edge case if addition in $a$ overflows to $t+1$ bits, then redefine $a = 100...0, e = l-t+1$)
+
+Then, 
+\begin{align*}
+    \frac{z - \hat{z}}{z} &= \frac{2^{l-t}b_{l-t-1} - b_{l-t-1} \cdots b_0}{z} \\
+    &= \begin{cases}
+        - b_{l-t-2} \cdots b_0 & b_{l-t-1} = 0 \\
+        2^{l-t-1} - b_{l-t-2} \cdots b_0 & b_{l-t-1} = 1
+    \end{cases} \\
+    &\le \frac{2^{l-t-1}}{z} \\
+    &\le \frac{2^{l-t-1}}{2^{l-1}} \le 2^{-t}
+\end{align*}
+
+Now, given $b, t \in Z$, we claim that we can find a 4 bit approximation of 1/b, and for $t \ge 4$ if we have a $t$-bit floating point approximation of $1/b$, then we can generate a $2t-3$ bit approximation.
+
+Define $f(x) = \frac{1}{x} - b$. Then, we want to find the root of this function. Thus we can use the newton's method update rule:
+\begin{align*}
+    f'(x) &= -\frac{1}{x^2} \\
+    x - \frac{f(x)}{f'(x)} &= x + (x - bx^2) = x(2 - bx) \\
+\end{align*}
+Update Rule: $x_{n+1} = x_n(2 -bx_n)$
+
+We can find a 4 bit approximation of 1/b in constant time (Consider an 8 bit approx of b, and take the 4bit float which is closest to 1).
+
+Now, for $t \ge 3$, let $x_t = a_t 2^{e_t}$ be a $t$ bit approximation of $1/b$, and $b_{2t+1}$ be a $(2t+1)$ bit approximation of integer $b$. Then, 
+\begin{align*}
+    \exists \epsilon \in \R: x_t &= \frac{1+\epsilon}{b}, |\epsilon| \le 2^{-t+1} \\
+    \exists \epsilon' \in \R: b_{2t+1} &= (1+\epsilon'), |\epsilon'| \le 2^{-2t-1}
+\end{align*}
+
+Define $\hat{x}$ and $\epsilon''$ as:
+\begin{align*}
+    \hat{x} &= x_t (2 - b_{2t+1} x_t) \\
+    &= \frac{(1+\epsilon)}{b}\left(2 - (1+\epsilon')b \cdot \frac{(1+\epsilon)}{b}\right) \\
+    &= \frac{(1+\epsilon)}{b} \left(1 - \epsilon - \epsilon' - \epsilon \epsilon'\right) \\
+    &= \frac{1}{b} \left(1 - \epsilon' - 2\epsilon \epsilon' - \epsilon^2 - \epsilon^2\epsilon'\right) \\
+    &= \frac{1}{b}\left(1 - \epsilon^2 - \epsilon'(1+\epsilon)^2\right) = \frac{1+\epsilon''}{b}
+\end{align*}
+
+For \(t \ge 3, |\epsilon| \le 2^{-2} = 0.25 \Rightarrow (1+\epsilon)^2 \le 2\). Thus:
+
+\begin{align*}
+    |\epsilon''| \le 2^{-2t+2} + 2^{-2t-1} \cdot 2 \le 1.25 \cdot 2^{-2t+2} \le 2^{-3}
+\end{align*}
+
+Now, we take a $(2t-3)$ bit approximation of $\hat{x}$, $x_{2t-3}$.
+
+Then, \(\exists \hat{\epsilon} \in \R: x_{2t-3} = \hat{x}(1+\hat{\epsilon}), |\hat{\epsilon}| \le 2^{-2t+3}\)
+
+\begin{align*}
+    \left|\frac{1/b-x_{2t-3}}{1/b}\right| &= |1 - b \cdot x_{2t-3}| \\
+    &= \left|1 - b \cdot \frac{1+\epsilon''}{b} \cdot (1+\hat{\epsilon})\right| \\
+    &= |\hat{\epsilon} + \epsilon'' + \epsilon'' \hat{\epsilon}| \\
+    &\le 2^{-2t+3}(1 + 2^{-3}) + 1.25 \cdot 2^{-2t+2} \\
+    &= 2^{-2t+3}(1+ 1.25/2 + 2^{-3}) \\
+    &\le 2^{-2t+4}
+\end{align*}
+
+Therefore, $x_{2t-3}$ is a valid $2t-3$ bit approximation of $1/b$.
+
+This procedure take $O(M(t))$ time (since $b_t, x_t$ are $t$ bit floats), and can be applied repeatedly till we have an k bit approximation of $1/b$, which can thus be found in $M(k) + M(k/2) + M(k/4) + \ldots + M(1) = O(M(k))$ time.
+
+Now we argue hardness of division. Let $a, b \in \Z$ be two $l$-bit integers. We can find \(\lfloor a/b \rfloor\) and \(a \bmod b\) by following steps:
+
+\begin{itemize}
+    \item Compute $z$ = $l+3$ bit approximation of $1/b$.
+    \item Compute $\hat{q} = a \cdot z$. Take nearest integer $q = \lfloor \hat{q} \rceil$. 
+    \item Compute $\hat{r} = a - b \cdot q$. If: 
+    \begin{itemize}
+        \item $r \le b$: return $\lfloor a/b \rfloor = q$, $a \bmod b = r$.
+        \item $r > b$: return $\lfloor a/b \rfloor = q+1$, $a \bmod b = r-b$.
+    \end{itemize}
+\end{itemize}
+
+Note that:
+\begin{align*}
+    |q - a/b| &\le |\hat{q} - a/b + 1/2| \\
+    &= |(1+\epsilon) a/b - a/b + 1/2| &\text{ (where $\epsilon$ is error due to approximation of $b$)} \\
+    &\le 2^{-l-2} \cdot 2^l + 1/2 &\text{(since we took $l+3$ bit approx)} \\
+    &< 1
+\end{align*}
+
+This means that:
+\begin{align*}
+    a/b - 1 &< q < a/b + 1 \\
+    \Rightarrow \lfloor a/b \rfloor - 1 &< q < \lfloor a/b \rfloor + 2&\text{(since $x -1 < \lfloor x \rfloor \le x$)} \\
+    \Rightarrow q - 1 &< \lfloor a/b \rfloor < q + 2
+\end{align*}
+Thus, the only possibilities of $\lfloor a/b \rfloor$ is $q$ or $q+1$ which is captured in the two cases of step 3.
+
+The 3 steps all take $O(M(l))$ time, and thus integer division with remainder is no harder than integer multiplication upto a constant factor.

@@ -1,0 +1,69 @@
+\subsection{Part (a)}
+By Chinese Remainder Theorem, we know that:
+
+\[
+\Z_N[x] \cong Z_{p_1}[x] \times Z_{p_2}[x] \times \cdots \times Z_{p_r}[x]
+\]
+
+We define the map $\varphi: \Z_N[x] \rightarrow Z_{p_1}[x] \times Z_{p_2}[x] \times \cdots \times Z_{p_r}[x]$ as:
+
+\[
+\forall f \in \Z_N[x]: \varphi(f) = (g_1, g_2, \cdots, g_r), g_i \equiv f \text{ mod } p_i
+\]
+
+We know that this is an isomorphism. Thus, to show that a polynomial $g \in Z_N[x]$ is irreducible, it is enough to show that $\varphi(g) \in Z_{p_1}[x] \times Z_{p_2}[x] \times \cdots \times Z_{p_r}[x]$ is irreducible.
+
+Now, consider the given polynomial, i.e, we have $g \in \Z_N[x], g_1 \in \Z_{p_1}[x]$ such that: 
+\begin{align*}
+    g &\equiv g_1 \text{ mod } p_1 \\
+    \forall 1 < i \le r:  g &\equiv 1 \text{ mod } p_i \\
+    g_1 &\text{ is irreducible} 
+\end{align*}
+
+\textbf{Claim 1: } g is irreducible in $\Z_N[x]$, i.e., $\forall f, h \in \Z_N[x]$ such that $g = fh$, either $f$ or $h$ is a unit.
+
+\textbf{Proof: } Consider $f, h \in \Z_N[x]$ such that $g = fh$. Moreover, let $\forall i: f_i, h_i \in \Z_{p_i}[x]$ such that $\varphi(f) = (f_1, f_2, \cdots f_r)$ and $ \varphi(h) = (h_1, h_2, \cdots, h_r)$.
+
+\begin{align*}
+    g &= fh \\
+    \Rightarrow \varphi(g) &= \varphi(f) \varphi(h) \\
+    \Rightarrow (g_1, 1, \cdots, 1) &= (f_1, f_2, \cdots, f_r) (h_1, h_2, \cdots h_r) \\
+    \Rightarrow (g_1, 1, \cdots, 1) &= (f_1 h_1, f_2 h_2, \cdots f_r h_r) \\
+    \Rightarrow f_1 h_1 = g_1&, \forall i > 1: f_i h_i = 1
+\end{align*}
+
+Therefore, we have $\forall i > 1, f_i$ and $h_i$ are units, and thus irreducible. Moreover, since $g_1$ is irreducible, one of $f_1$ and $h_1$ must be a unit. WLOG, assume $f_1$ is a unit.
+
+Then, $\varphi(f) = (f_1, f_2, \cdots f_r)$ is a unit (since multiplication is component wise). Using the fact that $\varphi$ is an isomorphism, we get that $f$ is a unit, and thus $g$ is irreducible.
+
+\hfill$\blacksquare$
+
+\subsection{Part (b)}
+
+Assume we have a $f \in \Z_N[x]$ such that we have factored it into irreducible polynomials mod $p_i$, i.e., let $\forall 1 \le i \le r: r_i \in \N$, $\forall 1 \le i \le r, 1 \le j \le s_i: f_{ij} \in \Z_{p_i}[x]$ such that $f_{ij}$ are irreducible and:
+
+\[
+\forall 1 \le i \le r: f \equiv f_{i1} f_{i2} \cdots f_{i s_i} \equiv \prod_{j = 1}^{s_i} f_{ij} \text{ mod } p_i
+\]
+
+Then, 
+\begin{align*}
+    \varphi(f) &= \left(\prod_{j = 1}^{s_1} f_{1j}, \prod_{j = 1}^{s_2} f_{2j}, \cdots, \prod_{j = 1}^{s_r} f_{rj} \right) \\
+    \Rightarrow \varphi(f) &= \prod_{i=1}^r \prod_{j=1}^{s_i} \left(1, 1, \cdots f_{ij}, 1, \cdots, 1 \right)
+\end{align*}
+
+As proved in part (a), each of these individual factors are irreducible, since $f_{ij}$ is irreducible. Thus, we have successfully factored the polynomial under the CRT map. The factors can be recovered by using the inverse of CRT map:
+
+Let $s_i \in \Z$ such that $\frac{N}{p_i} s_i + a_i p_i = 1$. This is guaranteed by Bezout's lemma, since $p_i$ is a prime and $p_i \nmid \frac{N}{p_i}$.
+
+\begin{align*}
+\varphi^{-1}\left(1, 1, \cdots f_{ij}, 1, \cdots, 1 \right) &\equiv \varphi^{-1}(1, 1, \cdots, 1) + \varphi^{-1}(0, 0, \cdots, f_{ij}-1, \cdots, 0) \text{ mod } N\\
+&\equiv 1 + \left(f_{ij} - 1 \right) s_i \frac{N}{p_i} \text{ mod } N
+\end{align*}
+Thus, we have that the \textbf{number of irreducible factors of f is the sum of number of irreducible factors modulo each $p_i$}, i.e., if s is the number of irreducible factors of f, then
+
+\[
+s = \sum_{i=1}^r s_i
+\]
+
+\hfill$\blacksquare$

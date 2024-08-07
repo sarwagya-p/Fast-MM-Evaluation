@@ -1,0 +1,24 @@
+\subsubsection{Part (a)}
+
+
+
+The degree sequence $\mathcal{D}$ contains no elements of $S$ and all elements of $T$. A degree sequence of length $l$ has $n,m$ in the first two positions and $l-1$ spots to be filled from $\{0,1,\ldots, m-1\}$. Out of the set $\{0,1\ldots, m-1\}$, $\mathcal{D}$ contains $|T|$ elements that are in $T$. Hence, we need to pick $l-1-|T|$ elements from a set of size $m-|S|-|T|$. Therefore, there are $\binom{m-|S|-|T|}{l-1-|T|}$ valid degree sequences of length $l$. From this we note that $0\leq l-1-|T|\leq m-|S|-|T|$ or $1+|T|\leq l\leq m-|S|+1$. From the Lemma in previous problem, we know that the number of non zero degree $d$ polynomials over a finite field $\mathbb{F}_q$ is $(q-1)q^d$. Therefore, the number of pairs $(f,g)$ is equal to the cardinality of the set $\mathscr{P}(\mathbb{F}_q,n)\times\mathscr{P}(\mathbb{F}_q,m)$ which is $(q-1)^2 q^{n+m}$. From previous problem, we know that the number of pairs $(f,g)$, where $f$ is of degree $n$ and $g$ is of degree $m$, such that the degree sequence is of length $l$ is $(q-1)^{l+1}q^n$.
+
+Therefore, 
+\begin{align*}
+    p_{S,T} &= \dfrac{1}{(q-1)^2 q^{n+m}}\sum_{l=|T|+1}^{m-|S|+1} \binom{m-|S|-|T|}{l-1-|T|} (q-1)^{l+1}q^n \\
+    &= \dfrac{1}{(q-1)^2 q^{n+m}}\sum_{l-|T|-1=0}^{l-|T|-1=m-|S|-|T|} \binom{m-|S|-|T|}{l-|T|-1} (q-1)^{l-|T|-1 + |T|+2}q^n \\
+    &= \dfrac{1}{(q-1)^2 q^{n+m}}\sum_{k=0}^{k=m-|S|-|T|} \binom{m-|S|-|T|}{k} (q-1)^{k+|T|+2}q^n \\
+    &=\dfrac{(q-1)^{|T|+2}q^n}{(q-1)^2 q^{n+m}}\sum_{k=0}^{m-|S|-|T|} \binom{m-|S|-|T|}{k} (q-1)^{k} \\
+    &= \dfrac{(q-1)^{|T|}}{q^{m}}\sum_{k=0}^{m-|S|-|T|} \binom{m-|S|-|T|}{k} (q-1)^{k} \\
+    &= \dfrac{(q-1)^{|T|}}{q^{m}}(1+(q-1))^{m-|S|-|T|} \\
+    &= (q-1)^{|T|}q^{-|S|-|T|} = \left(1-\frac{1}{q}\right)^{|T|}\left(\frac{1}{q}\right)^{|S|}
+\end{align*}
+as required. \hfill $\blacksquare$
+
+\subsubsection{Part (b)}
+
+We make use of the result from part (a) for this problem. We consider the disjoint subsets $S=\varnothing$ and $T=\{i\}$. Then $p_{S,T}$ denotes the probability that $i$ is in the degree sequence of the Euclidean algorithm for two polynomials in $\mathbb{F}_q[X]$ of degrees $n$ and $m$. Hence, $\P[X_i = 1] = p_{\varnothing, \{i\}} = (1-q^{-1})^{|\{i\}|} q^{-|\varnothing|} = 1-\frac{1}{q}$. Hence, $\P[X_i = 0] = \frac{1}{q}$. 
+
+We note that $\P[X_i = 1 | X_j = 1] = \frac{\P[X_i = 1, X_j = 1}{\P[X_j = 1]} = \frac{q}{q-1}\P[X_i=1,X_j=1] = \frac{q}{q-1}p_{\varnothing, \{i,j\}} = \frac{q}{q-1} (1-q^{-1})^{|\{i,j\}|}q^{-|\varnothing|} = \frac{q}{q-1}\frac{(q-1)^2}{q^2}=1-\frac{1}{q}=\P[X_i = 1]$. Hence, the independence. \hfill $\blacksquare$
+

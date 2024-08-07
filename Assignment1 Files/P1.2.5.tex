@@ -1,0 +1,91 @@
+Notations we will use for this problem. Let $\lBrack a,b\rBrack$ denote the set $\{k\in \N : a\leq k\leq b\}$. Let $\mathcal{S}\subseteq \lBrack 1,n\rBrack$. A $k$-term arithmetic progression with first term $\alpha$ and common difference $\delta$ is the set $\mathcal{A}(\alpha,\delta,k) = \{\alpha, \alpha+\delta, \ldots, \alpha+(k-1)\delta\}$. Since this problem will concern with $3$-term APs, $k=3$ and we'll use the notation $\mathcal{A}(\alpha,\delta) = \{\alpha-\delta, \alpha,\alpha+\delta\}$. Without loss of generality, $\delta>0$.
+
+We need to find the ordered pairs $(x,y)\in \mathcal{S}^2$ such that $x<y$ and $(x+y)/2\in \mathcal{S}$. 
+%Let $\operatorname{bit}(\mathcal{S}) = [b_1,b_2,\ldots, b_n]$, where $b_i = \mathbf{1}_{\mathcal{S}}(i)$, $i\in \lBrack 1,n\rBrack$.
+
+% Let $p^{\mathcal{S}}(x) = \frac{1}{x}\sum_{1\leq k\leq n} b_k x^k$ where $b_k = \mathbf{1}_{\mathcal{S}}(i), i\in \lBrack 1,n\rBrack$.
+
+% Consider the product $x^2 p^{\mathcal{S}}(x)\cdot p^{\mathcal{S}}(x)$. The coefficient of $x^r$ in this product is the number of ordered pairs $(x,z)\in \mathcal{S}^2$ such that $r = x+z$. Disregarding the trivial contribution of $(k,k)$ in the coefficient, if the coefficient of $x^{2k}$ is $y$, the contribution of that coefficient term is $(y-1)/2$.
+
+% The coefficient of $x^k$ in $x^2 p^{\mathcal{S}}(x)\cdot p^{\mathcal{S}}(x)$ is $\sum_{j=0}^k b_j b_{k-j}$. We'll use \textsc{DFT} to evaluate this convolution.
+
+% Without loss of generality, let $n$ be a power of $2$. (If $n$ is not a power of $2$, the $p^{\mathcal{S}}$ can be padded with a bunch of zero coefficient monomials).
+
+% Evaluate $p^{\mathcal{S}}(x)$ at $2n$ points $1, \omega_{2n}, \omega_{2n}^2,\ldots, \omega_{2n}^{2n-1}$ using \textsc{DFT}. This step takes $\Theta(n\log{n})$ time. Obtain the values of $p^{\mathcal{S}}(x)\cdot p^{\mathcal{S}}(x)$ at these $2n$ points through pointwise multiplication. This step takes $\Theta(n)$ time. We can use the inverse \textsc{DFT} to get the coefficients $c_0, c_1, \ldots, c_{2n-2}$. This step takes $\Theta(n\log{n})$ time. 
+
+% Once we have these coefficients we can get the polynomial $f(x) = x^2 \sum_{k=0}^{2n-2} c_k x^k$. In $\Theta(n)$ time, we extract the coefficients of $x^{2r}$ such that $r\in \mathcal{S}$ and sum up the values $(c_{2r-2}-1)/2$ for all such $r\in \mathcal{S}$. This number is the number of 3-term arithmetic progressions in a given subset $\mathcal{S}$ of $\lBrack 1,n\rBrack$.
+
+
+Without loss of generality let $n$ be a power of $2$. If not then we can consider the smallest power of $2$ that is greater than $n$. Let $\mathbf{a} = [a_0, a_1, \ldots, a_{n-1}]$, where $a_{i} = \mathbf{1}_{\mathcal{S}}(i+1)$, $i\in \lBrack 1,n\rBrack$.
+
+Our algorithms are as follows :
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{\(\mathbf{a},n\)}
+    \KwResult{\textsc{Recursive-DFT}$(\mathbf{a},n)$}
+    
+    \eIf{\(n = 1\)}{
+        \Return{$\mathbf{a}$} 
+    }{
+        $\omega_n \leftarrow \exp(i\frac{2\pi}{n})$,
+        $\omega \leftarrow 1$\;
+        $\mathbf{a}^{[0]}\leftarrow (a_0, a_2, \ldots, a_{n-2})$\;
+        $\mathbf{a}^{[1]}\leftarrow (a_1, a_3, \ldots, a_{n-1})$\;
+        $\hat{\mathbf{a}}^{[0]} \leftarrow$ \textsc{Recursive-DFT}$(\mathbf{a}^{[0]},\frac{n}{2})$\;
+        $\hat{\mathbf{a}}^{[1]} \leftarrow$ \textsc{Recursive-DFT}$(\mathbf{a}^{[1]},\frac{n}{2})$\;
+        \For{\(k = 0\) \KwTo \(\frac{n}{2} - 1\)}{
+            $\hat{a}_k \leftarrow \hat{a}_k^{[0]}+\omega \hat{a}_k^{[1]}$\;
+            $\hat{a}_{k+\frac{n}{2}} \leftarrow \hat{a}_k^{[0]}-\omega \hat{a}_k^{[1]}$\;
+            $\omega \leftarrow \omega\omega_n$\;
+        }
+        
+        \Return{$(\hat{a}_0,\hat{a}_1,\ldots, \hat{a}_{n-1})$} 
+    }
+    \caption{\textsc{Recursive-DFT} Algorithm}
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$\hat{\mathbf{a}} = (\hat{a}_0,\hat{a}_1,\ldots, \hat{a}_{n-1}),n$}
+    \KwResult{\textsc{Inverse-DFT}($\hat{\mathbf{a}},n$)}
+
+        \For{$k \leftarrow 0$ \KwTo $n-1$}{
+            $a_k \leftarrow 0$\;
+            \For{$j \leftarrow 0$ \KwTo $n-1$}{
+                $a_k \leftarrow a_k + \hat{a}_k \times \exp(-i\frac{2\pi kj}{n})$\;
+            }
+            $a_k \leftarrow a_k/n$\;
+        }
+        \KwRet{$\mathbf{a}$}\;
+    \caption{\textsc{Inverse-DFT} Algorithm}
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$\mathcal{S},n$}
+    \KwResult{\textsc{Count-ThreeAP}($\mathcal{S},n$)}
+        $\mathbf{a}\leftarrow (0,0,\ldots, 0)$\tcp*{2n 0's}
+        \For{$k\leftarrow 0$ \KwTo $2n-1$}{
+            \If{$k\in \mathcal{S}$}{$a_k \leftarrow 1$}
+        }
+        $\hat{\mathbf{a}}\leftarrow$\textsc{Recursive-DFT}($\mathbf{a},2n$)\;
+        $\hat{\mathbf{b}}\leftarrow (\hat{a}_0^2, \hat{a}_1^2,\ldots, \hat{a}_{2n-1}^2)$\;
+        $\mathbf{c}\leftarrow$\textsc{Inverse-DFT}($\mathbf{b},2n$)\;
+        $t \leftarrow 0$ \;
+        \For{$k\leftarrow 0$ \KwTo $2n-1$}{
+            \If{$2\mid k$ and $\frac{k}{2}+1\in \mathcal{S}$}{$t\leftarrow t + \frac{c_k-1}{2}$}
+        }
+        \KwRet{$t$}\;
+    \caption{\textsc{Count-ThreeAP} Algorithm}
+\end{algorithm}
+
+\textbf{Proof of correctness}
+
+The key idea is to somehow turn this problem into one involving the evaluation of a convolution. Using the general brute force approach will give us an $\mathcal{O}(n^2)$ solution which doesn't suffice our requirement of an $\mathcal{O}(n\log{n})$ solution.
+
+A valid AP $(x,y,z)$ satisfies $x+z=2y$. So we have we want to find the number of pairs $(x,y)$ such they sum up to two times an element in $\mathcal{S}$. For the sake of future convenience, we define an $n$ tuple $\mathbf{a}=[a_0, a_1, \ldots, a_{n-1}]$ where $a_i = \mathbf{1}_{\mathcal{S}}(i+1)$ for $i\in \lBrack 0, n-1\rBrack$. We consider the convolution $\mathbf{k}=\mathbf{a}\star \mathbf{a}$. Here $\mathbf{k}=[k_0, k_1, \ldots, k_{2n-2}]$ is a $2n-1$ tuple, where $k_m = \sum_{i=0}^m a_i a_{m-i}$ for $m\in \lBrack 0, 2n-2\rBrack$. We note that $k_m$ is precisely the number of ordered pairs $(x,y)\in \mathcal{S}^2$ such that $x+y = m$. Therefore, for our purpose it suffices to find $k_{2m}$'s, where $m\in \mathcal{S}$. The coefficent of $k_{2m}$ has contributions from pairs of the form $(x,y),(y,x)$ such that $x\neq y$ and a trivial contribution from $(m,m)$. After removing this trivial contribution and account for the double counting, we end up with the number of $3$-term APs whose middle term is $m$. We take the sum over all $m\in \mathcal{S}$ to get the number of $3$-term APs.
+
+\textbf{Time Complexity}
+
+The main bottleneck in our algorithm is the evaluation of the convolution $\mathbf{b} = \mathbf{a}\star \mathbf{a}$. We make use of discrete fourier transform and its inverse to evaluate the $\mathbf{b}$. Recursive DFT takes $\mathcal{O}(n\log{n})$ time and inverse DFT takes $\mathcal{O}(n)$ time. Final processing to get the number of $3$-APs is done in $\mathcal{O}(n)$ time. Therefore, the time complexity of our algorithm is $\mathcal{O}(n\log{n})$.

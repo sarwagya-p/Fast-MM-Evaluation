@@ -1,0 +1,61 @@
+\documentclass{beamer}
+\include{darkbeamerthemes}
+\usepackage{ragged2e}
+\def\Z{\ensuremath\mathbb{Z}}
+\def\C{\ensuremath\mathbb{C}}
+\def\Q{\ensuremath\mathbb{Q}}
+\def\N{\ensuremath\mathbb{N}} 
+\def\R{\ensuremath\mathbb{R}}
+\def\M{\ensuremath\mathcal{M}}
+\def\N{\ensuremath\mathbb{N}}
+\def\F{\ensuremath\mathbb{F}}
+\setbeamertemplate{footline}[frame number]
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+\newcommand{\fraka}{\ensuremath{\mathfrak{a}}}
+\newcommand{\frakb}{\ensuremath{\mathfrak{b}}}
+\usetheme{Hannover}
+\usecolortheme{magpie}
+%\usecolortheme{cormorant}
+\title{Multivariate Multipoint Evaluation (MME)}
+\author{Sarwagya Prasad, Rahul Bhardwaj}
+\date{\today}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Content}
+    \tableofcontents
+\end{frame}
+\section{Introduction}
+
+\section{Univariate Multipoint Evaluation over Finite Fields}
+\input{Project Files/BorodinMoenk}
+
+\section{Approximate Univariate Multipoint Evaluation over Complex}
+\input{Project Files/moroz}
+
+\section{Multivariate Multipoint Evaluation over Finite Fields}
+\input{Project Files/finite_mme}
+
+
+\section{Multivarate Multipoint Evaluation over Integers}
+\input{Project Files/MMEoverIntegers}
+\end{document}

@@ -1,0 +1,63 @@
+\begin{frame}{Preliminaries 1}
+    \begin{block}{Definition}
+        Define the precision function for integers and polynomials as follows :
+        \[\operatorname{prec}(U) = \begin{cases}\deg{U} + 1 & \text{if $U$ is a polynomial}, \\ \log_2 U & \text{if $U$ is an integer}.\end{cases}\]
+    \end{block}
+
+    \begin{block}{\textsc{PolyMult}}
+        Multiplication of two polynomials of degree $n$ and $m$ takes : 
+        \[\frac{9}{2} N \log{N} + 5N + \operatorname{ldt}\] time, where $N=n+m$.
+    \end{block} 
+\end{frame}
+\begin{frame}{Preliminaries 2}
+    \begin{block}{Divide and Rule}
+        If the timing function of an algorithm satisfies the recurrence : 
+        \[T(N) = 2T(N/2) + f(N)\],
+        where $f(N) = \mathcal{O}(N\log^{a}(N))$, then $T(N) = \mathcal{O}(N\log^{a+1}(N))$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Evaluation is Division}
+    \begin{enumerate}
+        \item Let $p(X) \in \mathbb{F}[X]$ be a polynomial which we want to evaluate at $x=\alpha \in \mathbb{F}$.
+        \item By division algorithm, there exist $q(X), r(X)\in \mathbb{F}[X]$ such that $\deg{r}<\deg(x-\alpha)$: 
+        \[p(X) = q(X)(x-\alpha) + r(x).\]
+        \item Hence $p(\alpha) = r(\alpha)$, but since $\deg{r} = 0$, $r$ is a constant polynomial.
+        \item Therefore, evaluating a polynomial at a point $\alpha$ becomes a problem of how quickly you can find the remainder of the corresponding division of the polynomial by $x-\alpha$.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Evaluation is Division}
+\justifying{
+If we want to evaluate a polynomial $p(x)$ and $x_1,\ldots, x_N$, then we try to write $f(x) = q(x)\prod_{1\leq i\leq N} (x-x_i) + r(x)$, where $\def{r}<N$. Hence, $f(x_i) = r(x_i)$ for $1\leq i\leq N$. Therefore, we've reduced our problem to a simpler problem.It suffices to consider the problem of evaluating polynomials of degree $N-1$ on $N$ points. Let $M_1(x) = (x-x_1)\cdots(x-x_{N/2})$ and $M_2(x) = (x-x_{N/2+1})\cdots (x-x_N)$. We divide $p(x)$ by $M_1(x)$ to get $R_1(x)$ and by $M_2(x)$ to get $R_2(x)$. The problem now reduces to evaluating two polynomials of $N/2-1$ degree at $N/2$ points each.}
+\end{frame}
+
+\begin{frame}{Algorithm}
+    Let $D$ be a Euclidean domain, we are given a set of $N$ moduli $\{m_i\}\in D$ and an element $U\in D$ for which we wish to compute the set of residues $u_i\in D$ such that : 
+    \[u_i \equiv U \pmod{m_i}, \quad 1\leq i\leq N.\]
+
+    \begin{block}{Theorem}
+        \justifying{Given $N$ moduli $m_i\in D$ and $U\in D$ where $\operatorname{prec}(U)=N$, if multiplication and division of $N$ precision elements can be performed in $\mathcal{O}(N\log^a(N))$ operations, then the $N$ residues $\{u_i\}$ of $U$, with respect to $\{m_i\}$ can be computed in $\mathcal{O}(N\log^{a+1}(N))$ steps, where $a\geq 0$.}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Algorithm}
+
+\boxed{\textsc{Modular Form}$(U,j,k)$}
+\newline
+\newline
+\textbf{Input : } \begin{itemize}
+    \item the requisite moduli $M_{jk}$,
+    \item the element $U$ where $\operatorname{prec}(U)\leq k-j+1$.
+\end{itemize}
+\textbf{Output : } the residues $u_i \equiv U \bmod{m_i}, \quad j\leq i\leq k$.
+
+\textbf{Step}
+\begin{enumerate}
+    \item If $j=k$, then output $U$ and go to step $4$.
+    \item Let $e := \lfloor (j+k-1)/2\rfloor$ and $f := e+1$. Set $R_1 := U \operatorname{rem} M_{je}$ and $R_2 := U \operatorname{rem} M_{fk}$.
+    \item Call $\textsc{Modular Forms}(R_1, j,e)$ and $\textsc{Modular Forms}(R_2, f,k)$.
+    \item Return.
+\end{enumerate}
+
+\end{frame}

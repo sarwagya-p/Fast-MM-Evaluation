@@ -1,0 +1,75 @@
+$R$ is a commutative ring, $n=2^m$ for some $m\in \Z_{\geq 1}$ and $\omega \equiv x \pmod{x^{n/2}+1} \in R[X]/\langle X^{n/2}+1 \rangle$. 
+
+We first note that $\omega^n = x^n = (x^{n/2}+1)(x^{n/2}-1)+1 \equiv 1 \pmod{x^{n/2}+1}$. We are given that $V_{\omega} = [v_{\omega}(i,j)]_{0\leq i,j<n}$ denotes the Vandermonde matrix such that $v_{\omega}(i,j)=\omega^{ij}$. 
+If $V_{\omega}\cdot V_{\omega^{-1}} = [v(i,j)]_{0\leq i,j<n}$, then the following follows directly from matrix multiplication :
+\begin{align*}
+    v(i,j) &= \sum_{k=0}^{n-1} v_{\omega}(i.k)v_{\omega^{-1}}(k,j) =  \sum_{k=0}^{n-1} \omega^{ik}\omega^{-kj} \\
+            &= \sum_{k=0}^{n-1} \omega^{(i-j)k} = \sum_{k=0}^{n-1} (\omega^{i-j})^k \\
+            &= \begin{cases}
+                \sum_{k=0}^{n-1} 1^k & i = j \\
+                \sum_{k=0}^{n-1} (\omega^{i-j})^k & i\neq j 
+            \end{cases} \\
+            &= \begin{cases}
+                n & i=j \\
+                \sum_{k=0}^{n-1} (\omega^{i-j})^k & i\neq j
+            \end{cases}
+\end{align*}
+\begin{center}
+\rule{0.5\textwidth}{.4pt}
+\end{center}
+\begin{thisnote1}
+
+\textbf{Note 1 :}
+
+Since $\omega^n \equiv 1 \pmod{x^{n/2}+1}$, we get that the multiplicative order of $\omega$ divides $2^m$. Note that $\omega^{2^{m-1}} \equiv -1 \pmod{x^{n/2}+1}$. Therefore if order of $\omega$ is equal to $2^k (k<m)$, then $\omega^{2^k} \equiv 1 \pmod{x^{n/2}+1} \implies (\omega^{2^k})^{2^{m-k-1}} \equiv 1^{2^{m-k-1}} \equiv 1 \pmod{x^{n/2}+1} \implies \omega^{2^{m-1}} \equiv 1\pmod{x^{n/2}+1}$ which is a contradiction. Hence the multiplicative order of $\omega$ in $R[X]/\langle X^{n/2}+1 \rangle$ is $n$.
+
+%Order of $\omega$ in $R[X]/\langle X^{n/2}+1 \rangle$ is $n$. S
+
+\textbf{Note 2 :} 
+\[\sum_{k=0}^{n-1} (\omega^{i-j})^k = \omega^{(j-i)n}\sum_{k=0}^{n-1} (\omega^{i-j})^k = \sum_{k=0}^{n-1} (\omega^{j-i})^{n-k} = \sum_{k=0}^{n-1} (\omega^{j-i})^k\]
+Therefore, without loss of generality, we assume $i>j$ in further calculations.
+
+Since $n$ is the order of $\omega$ in $R[X]/\langle X^{n/2}+1 \rangle$, if $\omega^{i-j}\equiv 1 \pmod{x^{n/2}+1}$, then $n\mid i-j \implies i-j=0$ or $i-j\geq n$. But $0<i-j<n$, which is a contradiction. Therefore, $\omega^{i-j}\not\equiv 1\pmod{x^{n/2}+1}$.
+\end{thisnote1}
+\begin{thisnote}
+    \textbf{Lemma}
+    
+    Let $n=2^m$ and $\omega \equiv x \pmod{x^{n/2}+1}$. If $t\in \N$, $1\leq t\leq n-1$, then there exists $r\in \{0,1,\ldots, m-1\}$, such that $\omega^{t2^r} + 1 \equiv 0 \pmod{x^{n/2}+1}$.
+
+    \textbf{Proof}
+
+    If $t$ is odd then, we note that $\omega^{t 2^{m-1}}+1 = (\omega^{2^{m-1}})^t + 1 = (\omega^{2^{m-1}}+1)(\sum_{k=0}^{t-1} \omega^{k2^{m-1}}) \equiv 0 \pmod{x^{n/2}+1}$. Hence, $r=m-1$ works if $t$ is odd.
+
+    If $t$ is even then let $t=2^{s}t'$, where $0<s<m-1$ and $2\nmid t'$. Consider $r=m-s-1$. We get $\omega^{t2^r}+1 = \omega^{2^s t' 2^{m-s-1}} + 1 = \omega^{t' 2^{m-1}} + 1 = (\omega^{2^{m-1}})^{t'} + 1 = (\omega^{2^{m-1}}+1)(\sum_{k=0}^{t'-1} \omega^{k2^{m-1}}) \equiv 0 \pmod{x^{n/2}+1}$. Hence, $r=m-s-1$ works. \hfill $\square$
+\end{thisnote}
+\begin{center}
+\rule{0.5\textwidth}{.4pt}
+\end{center}
+To evaluate the sum for the case when $i> j$, we consider the following identity :
+\[(1-z)(1+z+\ldots+z^{n-1}) = 1-z^n\]
+Substituting $z = \omega^{i-j}$ in this identity, we get :
+\[(1-\omega^{i-j})(1+\omega^{i-j}+\ldots +\omega^{(n-1)(i-j)}) = 1-\omega^{n(i-j)} = 0 \pmod{x^{n/2}+1}\]
+
+We do this in two steps. First, we show that :
+\begin{align*}
+    (1-z)(1+z)(1+z^2)(1+z^4)&\ldots(1+z^{2^{m-1}}) \\
+    &= (1-z^2)(1+z^2)(1+z^4)\ldots(1+z^{2^{m-1}})  \\
+    &= (1-z^4)(1+z^4)\ldots(1+z^{2^{m-1}}) \\
+    &= 1-z^{2^m}
+\end{align*}
+We get that either $z=1$ or the following is true :
+\begin{align*}
+    (1+z)(1+z^2)(1+z^4)\ldots(1+z^{2^{m-1}}) &= (1-z)^{-1}({1-z^{2^m}}) \\
+    &= 1+z+z^2+\ldots+z^{2^{m}-1} \tag{\star}
+\end{align*}
+Since $\omega^{i-j} \neq 1 \pmod{x^{n/2}+1}$, we substitute $z=\omega^{i-j}$ in $(\star)$ and take $\pmod{x^{n/2}+1}$ on both sides to get :
+\[ (1+\omega^{i-j})(1+\omega^{2(i-j)})(1+\omega^{4(i-j)})\ldots(1+\omega^{(i-j)2^{m-1}}) \equiv 1+\omega^{i-j}+\omega^{2(i-j)}+\ldots+\omega^{(i-j)(2^{m}-1)}\pmod{x^{n/2}+1} \tag{\star\star}\]
+
+We make use of the \textcolor{purple}{Lemma} we proved earlier with $t=i-j$. Note that the left hand side of $(\star\star)$ contains all possible factors $(1+\omega^{t2^r})$ and from lemma one of them is $0 \pmod{x^{n/2}+1}$. Therefore, we get :
+\[1+\omega^{i-j}+\omega^{2(i-j)}+\ldots+\omega^{(i-j)(2^{m}-1)}\equiv 0 \pmod{x^{n/2}+1}\]
+
+Therefore :
+\[v(i,j) = \begin{cases}
+                n & i=j \\
+                0 & i\neq j
+            \end{cases} \Rightarrow V_{\omega} \cdot V_{\omega^{-1}}= nI\] \hfill $\blacksquare$

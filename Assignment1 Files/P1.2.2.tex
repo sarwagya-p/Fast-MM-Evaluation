@@ -1,0 +1,115 @@
+We know that:
+
+\[
+h_k = \sum_{0 \le i \le k} f_i g_{k-i} 
+\]
+Since $\forall i$ deg($f_i$), deg($g_i$) $< k$: deg($h_i) < 2k-1$. 
+
+
+
+Guided by this, we define a transformation. Let $p \in R[x, y]$ such that:
+
+\[
+p(x, y) = \sum_{0 \le i < m} p_i(x) y^i, p_i \in R[x] \text{ and deg}(p_i) < 2k 
+\]
+
+Define $\Tilde{p}(x, y) = p(x, x^{2k})$
+
+We claim that there is no information lost in this transformation, even after multiplication. i.e., we claim:
+
+\begin{enumerate}
+    \item p is recoverable from $\Tilde{p}$ as: \\
+    Let $p_i = \sum p_{ij} x^j$ then
+    $p_{ij} = \Tilde{p}_l$ where $l = 2k \cdot i + j$
+    \item $\Tilde{h} = \Tilde{f} \Tilde{g}$.
+\end{enumerate}
+
+\textbf{Claim 1:} 
+
+Consider a term of $\Tilde{p}$, $\Tilde{p}_l$. By division lemma, $\exists q,r: l = 2kq + r, 0 \le r < 2k$
+
+\[
+\Tilde{p_l} = \sum_{i,j \ge 0: 2ki+j = l} p_{ij} x^j y^i
+\]
+
+Now, if $i \ne q$, then $i < q$ (since $2k(q+1) > l$).
+
+\begin{align*}
+    2ki + j &= l \\
+    \Rightarrow 2k(q-1) + j &\ge l \\
+    \Rightarrow j &\ge r + 2k
+\end{align*}
+
+But deg($p_i$) < 2k, which means $p_ij = 0$ if $j \ge 2k$.
+
+Therefore $\Tilde{p_l} = p_{ij}$ where i = q, j = r, and thus:
+
+\[
+p_{ij} = \Tilde{p}_l\text{ where }l = 2k \cdot i + j
+\]
+
+\textbf{Claim 2:}
+As noted above, deg($h_i$) $< 2k-1 < 2k$. Thus, we can use claim 1.
+For any term $\Tilde{h_l}$, let $l = 2kq+r$ such that $0 \le r < 2k$
+
+\begin{align*}
+    \Tilde{h_l} = h_{qr}
+    = \sum_{i=0}^q \sum_{j=0}^r f_{ij} g_{q-i, r-j} &= \sum_{i=0}^q \sum_{j=0}^r \Tilde{f}_{2ki+j} \Tilde{g}_{2k(q-i)+r-j} \\
+    &= \sum_{i=0}^q \sum_{j=0}^r \Tilde{f}_{2ki+j} \Tilde{g}_{l - (2ki+j)} \\
+    &= \sum_{i=0}^l \Tilde{f}_i \Tilde{g}_{l-i} \\
+    &= (\Tilde{f}\Tilde{g})_l
+\end{align*}
+
+Therefore, $\Tilde{h} = \Tilde{f}\Tilde{g}$
+
+Hence, to multiply f and g, we can instead multiply $\Tilde{f} \text{ and } \Tilde{g} = \Tilde{h}$, and then reconstruct h:
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$f, g \in R[x, y]$, m, k}
+    \KwResult{h = fg}
+
+        $\Tilde{f} \leftarrow f(x, x^{2k})$ \\
+        $\Tilde{g} \leftarrow g(x, x^{2k})$ \\[1\baselineskip]
+
+        $\Tilde{h} \leftarrow $ \textsc{Univariate-Multiply}($\Tilde{f}, \Tilde{g}$)
+
+        h $\leftarrow ((0, 0 \cdots 0), \cdots (0, 0 \cdots 0)) $ \tcp*{$2m-1 \times 2k-1$ array}
+
+        \For{$i \leftarrow 0$ to $2m-1$}{
+        \For{$j \leftarrow 0$ to $2k-1$}{
+        $h_{ij} \leftarrow \Tilde{h}_{2ki+j}$ 
+        }
+        }
+    \KwRet{h}
+    \caption{\textsc{Bivariate-Multiply} Algorithm}
+\end{algorithm}
+
+Where \textsc{Univariate-Multiply} is the chosen algorithm to multiply two univariate polynomials over R. \\
+$\text{deg}(\Tilde{f}), \text{deg}(\Tilde{g}) < 2km$ and thus this takes M(2mk) + O(mk) = O(M(mk)) time, where M(n) is the worst case time taken to multiply two polynomials over R of degree < n. 
+
+This can be extended to multivariate polynomials. Let $f, g \in R[x_1, x_2 \cdots x_k]$ be two polynomials such that $\text{deg}_i(f), \text{deg}_i(g) < m_i$, where $\text{deg}_i$ means degree in $x_i$
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{k, $f, g \in R[x_1, \cdots x_k], m = (m_1, \cdots m_k)$}
+    \KwResult{h = fg}
+    
+        $\Tilde{f} \leftarrow f(x_1, x_1^{2m_1}, x_1^{4m_1m_2} \cdots x_1^{2^{k-1}m_1m_2 \cdots m_{k-1}})$ \\  
+        $\Tilde{g} \leftarrow g(x_1, x_1^{2m_1}, x_1^{4m_1m_2} \cdots x_1^{2^{k-1}m_1m_2 \cdots m_{k-1}})$ \\[1\baselineskip]
+
+        $\Tilde{h} \leftarrow $ \textsc{Univariate-Multiply}($\Tilde{f}, \Tilde{g}$)\\[1\baselineskip]
+
+        $h \leftarrow (0)_{m_1 \times m_2 \cdots m_k}$ \\
+
+        \For{$(i_1, i_2 \cdots i_k), 0 \le i_j < m_j$}{
+        $l \leftarrow i_k + 2m_k \left(i_{k-1} + 2m_{k-1}\left(\cdots\right)\right)$ \\
+        $h_{i_1i_2 \cdots i_k} \leftarrow \Tilde{h}_l$
+        }
+    \KwRet{h}
+    \caption{\textsc{Multivariate-Multiply} Algorithm}
+\end{algorithm}
+
+Since the degrees, $\text{deg}(\Tilde{f}), \text{deg}(\Tilde{f}) < 2^k m_1 m_2 \cdots m_k$, this runs in $M(2^k m_1 m_2 \cdots m_k)$ time. If k, the number of polynomial variables, is taken as constant, the worst case runtime is $O(M(m_1 m_2 \cdots m_k))$.
+
+

@@ -1,0 +1,52 @@
+\begin{thisnote1}
+For the sake of convenience, let : $g=\sum_{i=0}^{m+k} g_i x^i$, where $g_i=0$ for $i>m$ and $h=\sum_{i=0}^{k+m} h_i x^i$, where $h_i = 0$ for $i>k$.
+\end{thisnote1}
+
+\subsection{Part (a)}
+
+We are given that $\phi_i$ is the coefficient of $x^i$ in $gh-f$ for $0\leq i<n$. Hence, $\phi_i :=\sum_{j=0}^i g_j h_{i-j} - f_i$. It follows that : $\dfrac{\partial \phi_i}{\partial g_j} = h_{i-j}$ and $\dfrac{\partial \phi_i}{\partial h_j} = g_{i-j}$.
+
+The Jacobian matrix looks as follows :
+\[J = \begin{bmatrix}
+        \dfrac{\partial \phi_0}{\partial g_0} & \cdots &\dfrac{\partial \phi_0}{\partial g_j} & \cdots & \dfrac{\partial \phi_0}{\partial g_m} & \dfrac{\partial \phi_0}{\partial h_0} & \cdots &\dfrac{\partial \phi_0}{\partial h_j} &\cdots&\dfrac{\partial \phi_0}{\partial h_k} \\ 
+
+
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+
+\dfrac{\partial \phi_i}{\partial g_0} & \cdots &\dfrac{\partial \phi_i}{\partial g_j} & \cdots & \dfrac{\partial \phi_i}{\partial g_m} & \dfrac{\partial \phi_i}{\partial h_0} & \cdots &\dfrac{\partial \phi_i}{\partial h_j} &\cdots&\dfrac{\partial \phi_i}{\partial h_k} \\ 
+
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+
+\dfrac{\partial \phi_{n-1}}{\partial g_0} & \cdots &\dfrac{\partial \phi_{n-1}}{\partial g_j} & \cdots & \dfrac{\partial \phi_{n-1}}{\partial g_m} & \dfrac{\partial \phi_{n-1}}{\partial h_0} & \cdots &\dfrac{\partial \phi_{n-1}}{\partial h_j} &\cdots&\dfrac{\partial \phi_{n-1}}{\partial h_k} 
+\end{bmatrix}\]
+We put the values of the partial derivatives to get $J$ as : 
+\[\begin{bmatrix}h_0 & \cdots & h_{-j} & \cdots & h_{-m} & g_0 & \cdots & g_{-j} & \cdots & g_{-k} \\
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+h_i &\cdots & h_{i-j} & \cdots & h_{i-m} & g_{i} & \cdots & g_{i-j} & \cdots & g_{i-k} \\
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+h_{n-1} & \cdots & h_{n-1-j} & \cdots & h_{n-1-m} & g_{n-1} & \cdots & g_{n-1-j} & \cdots & g_{n-1-k}
+\end{bmatrix}.\]
+Since, $g_j = 0$ for $j\notin \{0,\ldots, m\}$ and $h_j=0$ for $j\notin\{0,\ldots, k\}$ we get :
+\[\begin{bmatrix} h_0 & \cdots & 0 & \cdots & 0 & g_0 & \cdots & 0 & \cdots & 0 \\
+% h_1 & \cdots & 0 & \cdots & 0 & g_1 & \cdots & 0 & \cdots & 0 \\
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+h_i &\cdots & h_{i-j} & \cdots & h_{i-m} & g_{i} & \cdots & g_{i-j} & \cdots & g_{i-k} \\
+\vdots & \ddots &\vdots & \ddots& \vdots & \vdots & \ddots &\vdots & \ddots& \vdots \\
+h_{n-1} & \cdots & h_{n-1-j} & \cdots & h_{n-1-m} & g_{n-1} & \cdots & g_{n-1-j} & \cdots & g_{n-1-k}\end{bmatrix}\]
+which is the Sylvester matrix of $g$ and $h$.
+\subsection{Part (b)}
+
+
+\begin{thisnote}
+    \textbf{Lemma : } Suppose $p(X),q(X)\in R[X]$ be monic. Then, there exists $s(X),t(X)\in R[X]$ with $\deg{s}<\deg{q}$ and $\deg{t}<\deg{q}$ such that $s(X)p(X) + t(X)q(X) = 1$ if and only if $\det(\operatorname{Syl}(p,q)) \in R^*$. 
+
+    \textit{Proof}. Follows from Corollary $6.21$ in \textit{Modern Computer Algebra, Gathen and Gerhard}.
+\end{thisnote}
+\begin{thisnote1}
+Note that since $\operatorname{lc}(f) = g_m h_k \in R^*$, both $g_m,h_k \in R^*$. We observe that $\operatorname{Syl}(g\bmod{p}, h\bmod{p}) = \operatorname{Syl}(g,h)\bmod{p}$. Moving forward in this proof, $g$ and $h$ are taken to be modulo $p$.
+\end{thisnote1}
+% To make the polynomials $g(X)$ and $h(X)$ monic, we multiply both polynomials by $g_m^{-1}$ and $h_k^{-1}$ respectively, which exist because $g_m,h_k\in R^*$. Let $\tilde{g}(X) = g_m^{-1} g(X)$ and $\tilde{h}(X) = h_k^{-1} h(X)$. Note that $\det(\operatorname{Syl}(\tilde{g},\tilde{h})) = g_m^{-k}h_k^{-m} \det(\operatorname{Syl}(g,h)) = g_m^{-k}h_k^{-m} \det{J}$. If $\det{J}$ is invertible modulo $p$, then $g_m^{-k}h_k^{-m} \det{J}$ is a invertible modulo $p$. We can now apply the Lemma, to get that there exist $s(X), t(X)\in R[X]$ with $\deg{s}<\deg{\tilde{h}}$ and $\deg{t}<\deg{\tilde{g}}$ such that $s\tilde{g}+t\tilde{h} \equiv 1 \pmod{p}$.
+
+If $\det{J}$ is invertible modulo $p$, we get that $\det(\operatorname{Syl}(g,h))$ is invertible modulo $p$, or $\det(\operatorname{Syl}(g,h)) \in R^*$. Therefore, by Lemma, there exist $s(X), t(X) \in R[X]$ with $\deg{s}<\deg{h}$ and $\deg{t}<\deg{g}$ such that $sg+th \equiv 1 \pmod{p}$.
+
+Similarly, suppose there exist $s(X),t(X)\in R[X]$ such that $sg+th \equiv 1 \pmod{p}$. If $\deg{s}<\deg{h}$ and $\deg{t}<\deg{g}$, then we do nothing. If $\deg{s}\geq\deg{h}$, then by division algorithm, we get $s = q_1 h + s_1$. Let $t_1 = t+ q_1 g$. Then $s_1 g + t_1 h = sg - q_1 gh + th + q_1 gh = sg + th \equiv 1 \pmod{p}$. We proceed similarly if $\deg{t}\geq\deg{g}$. Hence, we've found $s_1, t_1\in R[X]$ such that $s_1 g + t_1 h \equiv 1 \pmod{p}$. Therefore, $\det(\operatorname{Syl}(g,h))\in R^*$, or $\det{J}$ is invertible modulo $p$. \hfill $\blacksquare$ 

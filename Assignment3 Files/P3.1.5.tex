@@ -1,0 +1,249 @@
+We have the kronecker substitution function $\sigma: \F[x_1, x_2 \cdots x_t] \rightarrow \F[x]$ such that it is linear and:
+\[
+\forall 1 \le i \le t, 0 \le j \le n: \sigma(x_i^{j}) = x^{j n^{i-1}}
+\]
+
+\subsection{Part (a)}
+Let $U = \{f \in \F[x_1, x_2 \cdots x_t] \vert \forall 1 \le i \le t: deg_{x_i}(f) < n\}$ and $V = \{f \in \F[x] \vert deg(f) < nt\}$. 
+
+Define $\Tilde{\sigma}: U \rightarrow V$ as the restriction of $\sigma$ to the domain $U$. To show that indeed U maps into V under $\sigma$, let \(m = \prod x_i^j\) be any monomial in U. Then,
+
+\begin{align*}
+    \Tilde{\sigma}(m) = x^{\sum_k j n^{k-1}} \\
+    j < n \Rightarrow \sum_k j n_{k-1} < n^t \\
+    \Rightarrow \Tilde{\sigma}(m) \in V
+\end{align*}
+\vspace{2\baselineskip}
+
+\textbf{Claim: } $\Tilde{\sigma}$ defines an isomorphism between $U$ and $V$.
+
+\textbf{Proof: } To show $\Tilde{\sigma}$ is an isomorphism $U$ and $V$, we need to show that it is linear, and that it is bijective.
+
+Linearity is trivial, since the map is defined by a linear extension.
+
+To show bijectivity, it is enough to show that $\Tilde{\sigma}$ is a bijection over a pair of bases of $U$ and $V$. Thus, consider the bases:
+
+\begin{align*}
+    B_U &= \left\{\prod_{k=1}^t x^{r_k}_k \vert r_k < n\ \right\}\\
+    B_V &= \left\{x^k \vert k < n^t\right\}
+\end{align*}
+
+\textbf{Injectivity: } Consider $m_1 = \prod x^{a_k}_k, m_2 = \prod x^{b_k}_k \in B_U$ such that $\Tilde{\sigma}(m_1) = \Tilde{\sigma}(m_2)$. Then, 
+
+\begin{align*}
+    \Tilde{\sigma}(m_1) &= \Tilde{\sigma}(m_2) \\
+    \Rightarrow x^{\sum a_k n^{k-1}} &= x^{\sum b_k n^{k-1}} \\
+    \Rightarrow \sum a_k n^{k-1} &= \sum b_k n^{k-1}
+\end{align*}
+
+Now, since $a_k, b_k < n$, both sides represent the same number in base n. Since any number has a unique representation in a base, we have $\forall k: a_k = b_k$. Thus, $m_1 = m_2$
+
+\textbf{Surjectivity: } Let $x^{a} \in B_V$. Consider the representation of $a$ in base n, i.e., let $a_k \in \{1, 2, \cdots n-1\}$ such that:
+
+\[
+a = \sum_{k=1}^t a_k n^{k-1}
+\]
+
+Note that it will have a maximum of $t$ "digits", since $a < n^t$. 
+
+Consider the monomial $m = \prod x_k^{a_k}$. Since $\forall k: a_k < n$, and $k \le t$, $m \in B_U$.
+
+\begin{align*}
+    \Tilde{\sigma}(m) &= x^{\sum a_k n^{k - 1}} \\
+    &= x^a
+\end{align*}
+
+Therefore, $m$ is a preimage of $x^a$ proving surjectivity.This implies that $\Tilde{\sigma}$ is bijective and thus an isomorphism.
+
+\hfill$\blacksquare$
+
+\subsection{Part (b)}
+
+We define the \verb|RECOVER-KRONECKER-FACTORS| algorithm, which takes as input a multivariate polynomial $f \in \F[x_1, x_2 \cdots x_t]$, and all irreducible factors $\{h_1, h_2 \cdots h_r\}$ of $\sigma(f)$. Not that the sets $H$ and $G$ can be multisets, if the corresponding polynomial is not square free.
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$f, H = \{h_1, h_2 \cdots h_r\}, n, t$}
+    \KwResult{Irreducible factors of $f, G = \{g_1, g_2 \cdots g_k\}$}
+        $G \leftarrow \phi$
+        $i \leftarrow 1$
+
+        \While{$H \ne \phi$}{
+        \For{$S \subseteq H$ such that $\lvert S \rvert = i$}{
+        $g_S \leftarrow \sigma^{-1}\left(\prod_{h_i \in S} h_i\right)$
+
+        \If{$g_S \vert f$}{
+        $G \leftarrow G \cup \{g_s\}$ \\
+        $H \leftarrow H \setminus S$ \\
+        $f \leftarrow f \fracslash g_S$
+        }
+        }
+
+        $i \leftarrow i + 1$
+        }
+        
+        \KwRet{$G$}\;
+    \caption{\textsc{Recover-Kronecker-Factors} Algorithm}
+\end{algorithm}
+
+Let us call the while loop on line 2 as outer loop and for loop on line 3 as inner loop. Also, let $G_i, H_i, f_i$ represent value of $G, H, f$ after $i^{th}$ iteration of inner loop respectively.
+
+We will now prove the correctness and termination of the algorithm. For this, consider an input $f$ and set $H^*$ of irreducible factors $h_1, h_2 \cdots h_r$ of $\sigma(f)$. Assume that the set $G^*$ such that $f = g_1 g_2 \cdots g_k$ are it's irreducible factors. We need to return these factors correctly. We first note that each factor $g_i$ corresponds to a subset $S_i \subseteq H$. More concretely:
+
+\textbf{Claim: }There is a partition of the set H into $S_1, S_2 \cdots S_k$ such that for some unit u:
+\[
+\sigma(g_i) = u \prod_{h \in S_i} h
+\]
+
+\textbf{Proof: } Let $T_i = \{h_{i1}, h_{i2} \cdots h_{i k_i}\}$ be the set of irreducible factors of $\sigma(g_i)$. Since $\sigma$ is a ring homomorphism, we have:
+\begin{align*}
+    \sigma(f) &= \sigma\left(\prod_{g_i \in G} g_i\right) \\
+    &= \prod_{g_i \in G} \sigma\left(g_i\right) \\
+    \Rightarrow \prod_{h_i \in H} h_i &= \prod_{g_i \in G} \prod_{h_{ij} \in T_i} h_{ij}
+\end{align*}
+Now, since every $h_i$ and $h_{ij}$ are irreducible, each factor on left corresponds to a factor on right, i.e.,
+
+\[
+\forall i,j: \exists l: h_l = u h_{ij} \text{ for some unit } u
+\]
+
+Hence, we can partition $H$ where $S_i$ corresponds to $T_i$ as proved to uniquely exist above.
+
+\hfill$\blacksquare$
+
+Using the above claim, we can prove the following two invariants:
+
+\textbf{Invariant 1: } After any iteration of the inner loop, we have:
+
+\[
+f = \prod_{g' \in G_i} g' \cdot f_i \text{ and } f_i = \sigma^{-1}\left(\prod_{h \in H_i} h\right)
+\]
+
+\textbf{Proof: }
+
+Assume that the invariant is true before the $i^{th}$ iteration, and for some $S \subseteq H$ $g_S \vert f_{i-1}$ and is thus added to $G$. Then, we have:
+
+\begin{align*}
+    f = \prod_{g' \in G_{i-1}} g' \cdot f_{i-1} \text{ and } f_{i-1} = \sigma^{-1}\left(\prod_{h \in H_{i-1}} h\right) \\
+    G_i = G_{i-1} \cup \{g_S\} \text{ and } H_i = H_{i-1} \setminus S \text{ and } g_S = \sigma^{-1}\left(\prod_{h \in S} h\right)
+\end{align*}
+
+Using the fact that $g_S \vert f_{i-1}$ and above facts, we get:
+
+\begin{align*}
+    f_{i-1} &= g_S f_i \\
+    \Rightarrow \sigma(f_{i-1}) &= \sigma(g_S) \cdot \sigma(f_i) \\
+    \Rightarrow \prod_{h \in H_{i-1}} h &= \prod_{h \in S} h \cdot \sigma(f_i) \\
+    \Rightarrow \sigma(f_i) &= \prod_{h \in H_{i-1} \setminus S} h \\
+    \Rightarrow f_i &= \sigma^{-1}\left(\prod_{h \in H_i} h\right)
+\end{align*}
+
+\begin{align*}
+    f &= \prod_{g' \in G_{i-1}} g' \cdot f_{i-1} \\
+    &= \prod_{g' \in G_{i-1}} g' \cdot g_S f_i \\
+    &= \prod_{g' \in G_{i-1}} g' \cdot \prod_{g' \in S} g' \cdot f_i \\
+    &= \prod_{g' \in G_{i-1} \cup S} g' \cdot f_i \\
+    &= \prod_{g' \in G_i} g' \cdot f_i
+\end{align*}
+
+Thus, by mathematical induction, invariant is always true.
+
+\hfill$\blacksquare$
+
+\textbf{Claim: } If at any iteration of inner loop, $g_S$ is added to $G$, then $g_S$ is irreducible.
+
+\textbf{Proof: } Let $p, q$ be polynomials such that $g_S = pq$. Then,
+
+\begin{align*}
+    \sigma(g_S) &= \sigma(p)\sigma(q) \\
+    \prod_{g \in S} g &= \sigma(p) \sigma(q)\\
+    \Rightarrow \exists \text{ unit } u \text{ and partition } &S_p \cup S_q = S \text{ such that } \sigma(p) = u\prod_{g \in S_p} g; \sigma(q) = u^{-1}\prod_{g \in S_q} g
+\end{align*}
+
+Assume towards contradiction that $S_q \subset S$ and $S_q \subset S$, i.e., both are proper subsets. Then,
+\begin{align*}
+g &\vert f \\
+\Rightarrow pq &\vert f \\
+\Rightarrow p &\vert f \\
+\Rightarrow S_p &\text{ would pass the if check at line 5 }
+\end{align*}
+
+Then, all instances of $S_p$ would have been removed in a previous iteration of outer loop, which means $S \supseteq S_p$ is not present in $H$, which is a contradiction.
+
+Thus, either $S_p$ or $S_q$ is empty, which means either p or q is unit. Therefore $g_S$ is irreducible.
+
+\textbf{Corollary: } Since every element added to $G$ is irreducible and divides f, $G \subseteq G^*$, upto a unit.
+
+\vspace{2\baselineskip}
+\textbf{Invariant 2: } After the $i^{th}$ iteration of outer loop, for all factors $g_j$ such that $\lvert S_j \rvert \le i$, $g_j \in G_i$.
+
+\textbf{Proof: } Assume the invariant is true for iteration $i$. Then, 
+
+\begin{align*}
+    f &= f_i \cdot \prod_{g_i: \lvert S_i \rvert \le i} g_i \\
+    \Rightarrow \prod_{g_i \in G^*} &= f_i \cdot \prod_{g_i: \lvert S_i \rvert \le i} g_i \\
+    \Rightarrow f_i &= \prod_{g_i: \lvert S_i \rvert > i} g_i &\text{(since $G^* = \bigcup S_i$})
+\end{align*}
+
+Now, let $g_i$ be any factor such that $\lvert S_i \rvert = i+1$. Then, since $g_i \vert f_i$, it will pass if check on line 5 and be added to $G$. Therefore, $G_{i+1} = \{g_i \vert \lvert S_i \rvert \le i+1\}$
+
+\textbf{Corollary: } Since $\lvert S_i \rvert \le r$ since they form a partition, the algorithm terminates after a maximum of r steps of outer loop, since all the partitioning subsets $S_i$ will be removed from $H$ and it becomes empty.
+
+Moreover, at the end of the algorithm, Invariant 1 gives:
+
+\begin{align*}
+    H_r &= \phi \Rightarrow f_i = 1 \\
+    \Rightarrow f &= \prod_{g \in G_r} g \cdot f_r \\
+    \Rightarrow f &= \prod_{g \in G_r} g
+\end{align*}
+
+And by claim, each g is irreducible. Hence, the algorithm correctly factorizes f into irreducible factors.
+
+\hfill $\blacksquare$
+
+\subsection{Part (c)}
+
+To analyze the running time, we find the worst case time to recover one factor. We notice that in the worst case, we will have to loop from $i = 1 \cdots r \fracslash 2$ to find the first factor:
+
+Assume f is not irreducible, thus it can be factorized into $\{g_1, g_2 \cdots g_k\}$. Each $g_i$ corresponds to a subset of $G_i \subseteq H = \{h_1, h_2 \cdots h_r\}$. Thus:
+
+\begin{align*}
+    \sum_{i=1}^r \lvert G_i \rvert = r \\
+    \Rightarrow \exists j \text{ such that } \lvert G_i \rvert \le \frac{r}{k} \le \frac{r}{2} &\text{(By Pigeonhole Principle)}
+\end{align*}
+
+Moreover, the worst case of $i = r \fracslash 2$ occurs when f has only 2 irreducible factors and the corresponding $G_1$ and $G_2$ have size $r \fracslash 2$.
+
+For each value of i, we have ${r \choose i}$ iterations, for each possible $i$ sized subset of $H$. Each iteration is dominated by univariate multiplication of $i$ polynomials, whose degrees sum to less than $n^t$. Thus, the total running time $T(n)$ becomes:
+
+\begin{align*}
+    T(n) &\le \sum_{i=1}^{r \fracslash 2} {r \choose i} M(n^t) \\
+    &\le M(n^t) \sum_{i=1}^{r \fracslash 2} {r \choose i} \\
+    &\le M(n^t) 2^{r-1}
+\end{align*}
+
+Using the in the worst case, $r = n^t$, we have:
+
+\[
+T(n) \le M(n^t) 2^{n^t-1} = O\left(M(n^t) 2^{n^t}\right)
+\]
+
+Hence, it is exponential in the degree of the polynomial. With the best known algorithms for univariate multiplication of $O(n log n)$, we can say that:
+
+\begin{itemize}
+    \item For finite field $\F_q: T(n) = O(t n^t 2^{n^t} \log n \log q)$
+    \item For infinite fields, $T(n) = O(t n^t 2^{n^t} \log n \log c)$, where c is the maximum of size of coefficients.
+
+\subsection{Part (d)}
+We implemented the above algorithm in SageMath. We got the following output:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{Assignment3 Files/q5b.jpeg}
+    \caption{Output of Kronecker Factorizing Algorithm}
+    \label{fig:enter-label}
+\end{figure}
+
+The code for the same can be found on the github link: 
+\href{https://github.com/sarwagya-p/COL863_PS3}{https://github.com/sarwagya-p/COL863\_PS3}
+\end{itemize}

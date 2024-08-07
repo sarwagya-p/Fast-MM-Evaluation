@@ -1,0 +1,40 @@
+\begin{frame}{Exact-MME over $\Z$}
+    \begin{block}{Problem Statement}
+        \justifying{\textbf{Input : } An integer $s>0$, a polynomial $f(x_1,\ldots, x_n) \in \Z[x_1, \ldots, x_m]$ of individual degree less than $d$, given as a list of $d^m$ integer coefficients, a set of points $\mathbf{a}^{(1)},\ldots, \mathbf{a}^{(N)}\in \Z^m$ with each coordinate of magnitude at most $2^s$, with the guarantee that all coefficients of $f$, coordinates of $\mathbf{a}^{(i)}$'s, and evaluations $f(\mathbf{a}^{(i)})$ are bounded in magnitude by $2^s$.
+\\  
+        \textbf{Output : } Integers $b_1,\ldots, b_N$ that are the evaluations, i.e. $b_i = f(\mathbf{a}^{(i)})$ for $i\in [N]$.}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Exact-MME over $\Z$}
+    \begin{block}{Theorem}
+        There is a deterministic algorithm that on input as mentioned above returns the required output as mentioned above and runs in deterministic time $((d^m+Nm)\cdot s)^{1+o(1)}$ for all $m\in \N$ and sufficiently large $d\in \N$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Algorithm}
+    \tiny{\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{$f(x_1,\ldots, x_n)\in\Z[x_1,\ldots,x_n]$ and $\mathbf{a}^{(1)},\ldots, \mathbf{a}^{(N)}\in \Z^N$, and an integer $s>0$ such that $|\mathbf{a}^{(i)}|<2^s$ and $|f(\mathbf{a}^{(i)})|<2^s$.}
+    \KwResult{$b_i = f(\mathbf{a}^{(i)})$ for $i\in [N]$.}
+        Compute the first $s$ prime numbers $\{p_1,\ldots, p_s\}$.\\
+        Let $L\leq s$ be the smallest integer such that $p_1\cdots p_L =: M > 2^{s+1}$. \\
+        \For{$e\in \{0,\ldots, d-1\}^m$}{
+            Compute $f_e^{(l)} = f_e \bmod{p_l}$ for $l\in L$.
+        }
+        \For{$i\in [N], k\in [M]$}{
+            Compute $a_{j,k,l} = \mathbf{a}_k^{(l)}\bmod p_l$ for $l\in L$.
+        }
+        \For{$l\in [L]$}{
+            Let $f^{(l)}(x_1,\ldots, x_m) = \sum_\mathbf{e}f_{\mathbf{e}}^{(l)}\mathbf{x}^{\mathbf{e}}\in \mathbb{F}_{p_l}[\mathbf{x}]$.\\
+            Let $\mathbf{a}^{(i,l)}=(a_{i,1,l},\ldots, a_{i,m,l})\in \mathbb{F}_{p_l}^m$ for each $i\in [N]$.\\
+            Compute $b_{i,l} = f^{(l)}(\mathbf{a}^{(i,l)})$ for all $i\in [N]$ using Finite MME algorithm.
+        }
+        \For{$i\in [N]$}
+        {
+            Compute the unique $b_i\in [-M/2, M/2]$ such that $b_i = b_{i,l} \bmod{p_l}$ for all $l\in [L]$.
+        }
+        \KwRet{$\{b_i : i\in [N]\}$}\;
+    \caption{\textsc{Exact-MME-Integers}}
+\end{algorithm}}
+\end{frame}

@@ -1,0 +1,46 @@
+Note that : 
+\[2^{2n}-1 = (2^n)^2 - 1 = (2^n - 1)(2^n+1) \equiv 0 \pmod{2^n + 1}\]
+Therefore, $2$ is always a $2n$-th root of unity modulo $2^n + 1$.
+
+\textbf{Necessity}
+Assume that 2 is a $2n$-th primitive root of unity.
+For the sake of contradiction, let $p$ be an odd prime that divides $n$. We can write $n$ as $pn'$, where $1\leq n \in \N$. Since $p$ is odd, we can write :
+\[\forall z \in \Z_{2^n+1}: z^p + 1 = (z+1)(z^{p-1}-z^{p-2}+\ldots-z+1)\]
+Substituting $z=2^{n'}$, we get : 
+\[(2^{n'}+1)(2^{n'(p-1)}-2^{n'(p-2)}+\ldots-2^{n'}+1) = 2^{pn'}+1 = 2^n+1 \equiv 0 \pmod{2^n+1}\]
+It follows that : 
+\[(2^{n'}-1)(2^{n'}+1)(2^{n'(p-1)}-2^{n'(p-2)}+\ldots-2^{n'}+1)\equiv 0 \pmod{2^n + 1}\]
+Hence, 
+\[(2^{2n'}-1)(2^{n'(p-1)}-2^{n'(p-2)}+\ldots-2^{n'}+1)\equiv 0 \pmod{2^n + 1}\]
+We observe that :
+\begin{align*}
+    0 < 2^{n'(p-1)}-2^{n'(p-2)}+\ldots-2^{n'}+1 &= 2^{n-n'}-2^{n-2n'}+\ldots - 2^{n-(p-1)n'}+1 \\
+    &\le 2^{n-1} + 2^{n-2} \ldots + 1 \\
+    &= 2^n - 1 \\
+    \Rightarrow 2^{n'(p-1)}-2^{n'(p-2)}+\ldots-2^{n'}+1 &\not\equiv 0 \pmod{2^n+1}
+\end{align*}
+Hence, $2^{2n'}-1$ is a zero divisor in $\Z/(2^n+1)\Z$, which contradicts the primitiveness of $2$ in $\Z/(2^n+1)\Z$.
+
+Therefore, no odd prime divides $n$.
+
+\textbf{Sufficiency}
+
+Let $n$ be a positive integer and $\omega\in R$.
+\begin{enumerate}
+    \item $\omega$ is a $n$-th root of unity if $\omega^n = 1$.
+    \item $\omega$ is a primitive $n$-th root of unity if :
+    \begin{enumerate}
+        \item $\omega^n = 1$
+        \item $n$ is a unit in $R$
+        \item for every prime divisor $t$ of $n$, the element $\omega^{n/t}-1$ is neither zero nor a zero divisor.
+    \end{enumerate}
+\end{enumerate}
+
+In our case we are working with $2n$-th roots of unity, $R = \Z/(2^n+1)\Z$ and $\omega = 2$. If $n=2^m$, where $m\in \Z_{\geq 1}$, then
+
+$2n = 2^{m+1}$ is a unit in $\Z/(2^{2^m}+1)\Z$ because $\gcd(2^{m+1},2^{2^m}+1) = 1$. 
+
+Since $2$ is the only prime that divides $n$, it suffices to show that $2^{2n/2}-1 = 2^n-1 = 2^{2^m}-1$ is neither zero not a zero divisor in $\Z/(2^{2^m}+1)\Z$. 
+
+We first note that $2^{2^m}-1 \equiv -2 \pmod{2^{2^m}+1}$, so it is not $0$. Since $\gcd(2,2^{2^m}+1) = 1$, $2$ is a unit in $\Z/(2^n+1)\Z$ and therefore $-2\equiv 2^{2^m}-1$ is a unit in $\Z/(2^n+1)\Z$. Units in a ring can never be zero divisors, therefore $2$ is a primitive $2n$-th root of unity modulo $2^n+1$.\hfill $\blacksquare$.
+

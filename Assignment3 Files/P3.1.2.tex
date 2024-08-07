@@ -1,0 +1,49 @@
+\begin{thisnote1}
+
+If $p(X)$ is irreducible over $\mathbb{Q}$, then there exist polynomials $q(X),r(X)\in \Z[X]$ such that $p(X) = q(X)\cdot r(X)$.
+
+\end{thisnote1}
+Let $f(X) = \sum_{i=0}^n f_i X^{i}\in \Z[X]$ be a non-constant polynomial such that $p \nmid f_n$, $p\mid f_i$ for $0\leq i\leq n-1$ and $p^2 \nmid f_0$.
+For the sake of contradiction, suppose $f(X)$ is not irreducible in $\Z[X]$.
+\[f(X) = q(X)\cdot r(X),\quad  q(X) = \sum_{i=0}^t q_i X^i  \text{ and } r(X) = \sum_{i=0}^s r_i X^i.\]
+
+Since $p\nmid f_n = q_t\cdot r_s$, we get $p\nmid q_t$ and $p\nmid r_s$. Since $p\mid f_0 = q_0 \cdot r_0$, we get $p\mid q_0$ or $p\mid r_0$. If $p\mid q_0$ and $p\mid r_0$, then $p^2\mid q_0\cdot r_0 = f_0$, which is a contradiction. Therefore, $p$ divides one of $q_0$ or $r_0$. Without loss of generality, let $p\mid q_0$ and $p\nmid r_0$. Let $l=\min\{1\leq k\leq t : p\nmid q_k\}$. Since $q(X)$ and $r(X)$ are non-constant polynomials, $l\leq t<n$. So, $p\mid f_l$. Since $l$ is the least $k$ such that $p\nmid q_k$, $p\mid q_{l-1}$. Therefore,
+    \[p \mid  \sum_{i=0}^{l-1} q_i \cdot r_{l-i} = f_l - q_l\cdot r_0 \implies p\mid q_l\cdot r_0 \implies p\mid q_l\ \lor\ p\mid r_0, \]
+    which is a contradiction. \hfill $\blacksquare$
+
+\subsection{Part (a)}
+
+Let $p(X) = X^n - p = \sum_{i=0}^n a_i X^i$. Then, $a_n = 1$, $a_i = 0$ for $1\leq i\leq n-1$ and $a_0 = -p$. We note that $p\nmid a_n$, $p\mid a_i$ for $0\leq i\leq n-1$ and $p^2\nmid a_0$. Therefore, by Eisenstein's theorem, $p(X) = X^n - p$ is irreducible over $\mathbb{Q}[X]$.
+
+\subsection{Part (b)}
+
+Consider the polynomial : 
+\[f(X) = X^4 - 10X^2 + 1.\]
+Over $\C$, this polynomial has roots $\sqrt{2}+\sqrt{3},\sqrt{2}-\sqrt{3},-\sqrt{2}+\sqrt{3},$ and $-\sqrt{2}-\sqrt{3}$. Note that this is also the polynomial in $\Q[X]$ with least degree with $\sqrt{2}+\sqrt{3}$ as a root. Therefore, $f(X)$ is irreducible over $\Q[X]$.
+\footnote{\begin{thisnote}
+    Suppose $\exists\ f(X) = X^2+aX+b \in \Q[X]$ such that $f(\sqrt{2}+\sqrt{3}) = 0$, then $5+2\sqrt{6}+a\sqrt{2}+a\sqrt{3}+b = 0$ which cannot be true for any $a,b\in \Q$. Similarly, suppose $\exists\ f(X) = X^3+aX^2+bX+c\in \Q[X]$ such that $f(\sqrt{2}+\sqrt{3})=0$, then $11\sqrt{2}+9\sqrt{3}+a(5+2\sqrt{6})+b\sqrt{2}+b\sqrt{3}+c = 0$. It follows that, $(11+b)\sqrt{2}+(9+b)\sqrt{3}+2a\sqrt{6}+5a+c = 0$. Hence, $a=c=0$ and $11+b=9+b=0$ which is impossible.
+\end{thisnote}}
+
+We claim that $f(X)$ is reducible over all finite fields. In $\F_2$, our polynomial is $f(X) = X^4 + 1 = (X^2+1)^2$ and is therefore reducible. If $\F = \F_{3^s}$, then $f(X) = X^4+2X^2+1 = (X^2+1)^2$. Suppose $\F = \F_{q}$, $q=p^s$, where $p\neq 3$ is an odd prime.
+
+Suppose $\exists t\in \Z_p : t^2 \equiv 2 \pmod{p}$. Then we note that the polynomial $\tilde{f}(X) = (X-t)^2 - 3 \in \Q[X]$ is a polynomial of degree $2$ with $\sqrt{2}+\sqrt{3}$ as a root hence $f(X)$ is reducible over $\Z_p$. Similarly if $\exists s\in \Z_p : s^2 \equiv 3 \pmod{p}$, then $\tilde{f}(X) = (X-s)^2-2 \in \Q[X]$ is a polynomial of degree $2$ with $\sqrt{2}+\sqrt{3}$ as a root hence $f(X)$ is reducible over $\Z_p$.
+
+Suppose $\nexists t,s \in \Z_p : t^2\equiv 2 \pmod{p}$ and $s^2 \equiv 3 \pmod{p}$. Consider the endomorphism $\tau : \Z_p^* \to \Z_p^*$ such that $x\mapsto x^2$. We note that $\ker{\tau} = \{x\in \Z_p^* : x^2 = 1\} = \{1,p-1\}$. By first isomorphism theorem, we get that : $\mathcal{I} = \operatorname{Im}(\tau)\cong \Z_p^*/\ker(\tau)$. Therefore, $\Z_p^*/\mathcal{I}$ contains precisely two elements. From our supposition, $2,3\notin \mathcal{I}$. So, $2\mathcal{I}=3\mathcal{I}\neq \mathcal{I}$. Hence, $2\mathcal{I}\cdot 2\mathcal{I}=3\mathcal{I}\cdot 2\mathcal{I}$ or $6\mathcal{I} = 2^2\mathcal{I} = \mathcal{I}$, since $2^2\in \mathcal{I}$. Therefore, $6\in \mathcal{I}$. Let $r\in \Z_p^*$ such that $r^2 \equiv 6 \pmod{p}$. It follows that $\sqrt{2}+\sqrt{3}$ is a root of $X^2 - 5 -2r$ and hence $f(X)$ is reducible over $\mathbb{F}_q$.
+
+Therefore, $f(X)$ is reducible over finite fields but irreducible over $\Q$. \hfill $\blacksquare$
+
+
+
+% $p(X) = X^2 - 2$ is irreducible over $\Q$ but reducible over all finite fields.
+% \begin{enumerate}
+%     \item Since $p\nmid f_n = q_t\cdot r_s$, we get $p\nmid q_t$ and $p\nmid r_s$.
+%     \item Since $p\mid f_0 = q_0 \cdot r_0$, we get $p\mid q_0$ or $p\mid r_0$. If $p\mid q_0$ and $p\mid r_0$, then $p^2\mid q_0\cdot r_0 = f_0$, which is a contradiction. Therefore, $p$ divides one of $q_0$ or $r_0$. Without loss of generality, let $p\mid q_0$ and $p\nmid r_0$.
+%     \item Let $l=\min\{1\leq k\leq t : p\nmid q_k\}$. Since $q(X)$ and $r(X)$ are non-constant polynomials, $l\leq t<n$. So, $p\mid f_l$.
+%     \item Since $l$ is the least $k$ such that $p\nmid q_k$, $p\mid q_{l-1}$. Therefore,
+%     \[p \mid  \sum_{i=0}^{l-1} q_i \cdot r_{l-i} = f_l - q_l\cdot r_0 \implies p\mid q_l\cdot r_0 \implies p\mid q_l\ \lor\ p\mid r_0, \]
+%     which is a contradiction. \hfill $\blacksquare$
+% \end{enumerate}
+
+
+
+

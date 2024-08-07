@@ -1,0 +1,101 @@
+Let $B_1 = [b_{11} | b_{12} .. | b_{1n}], B_2 = [b_{21} | b_{22} .. | b_{2n}]$ be a basis for $L_1, L_2$ respectively.
+\[
+\widehat{\mathcal{L}(B)} = \{x \in \operatorname{span}(B) | \forall y \in \mathcal{L}(B): \langle x\;,\;y \rangle \in \Z\}
+\]
+We use the following two claims, proof of which is written after the answer.
+
+\begin{itemize}
+    \item $\exists D \in \R^{m \times n}: \mathcal{L}(D) = \widehat{\mathcal{L}(B)}$ and $\forall 1 \le i, j \le n:  \langle b_i \;,\; d_j \rangle = \delta_{ij}$
+    \item $\widehat{\widehat{\mathcal{L}(B)}} = \mathcal{L}(B)$
+\end{itemize}
+
+For the question to make sense, we assumed $span(B_1) = span(B_2)$. Let $D_1 = [d_{11} | d_{12} .. | d_{1n}], D_2 = [d_{21} | d_{22} .. | d_{2n}]$ be the basis for the dual lattices, satisfying claim (1). We need to show that $\mathcal{L}_1 \cap \mathcal{L}_2 = \widehat{\hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}}$.
+
+Let $x \in \mathcal{L}_1 \cap \mathcal{L}_2$. Then,
+
+\begin{align*}
+    \forall y \in \hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}\text{, let }y &= \alpha y_1 + \beta y_2, \text{ where }y_1 \in \hat{\mathcal{L}_1} \text{ and }y_2 \in \hat{\mathcal{L}_1}, \alpha, \beta \in \Z. \\
+    \langle x \;,\; y \rangle &= \langle x \;,\; \alpha y_1 + \beta y_2 \rangle \\
+    &= \alpha \langle x \;,\; y_1 \rangle + \beta \langle x \;,\; y_2 \rangle 
+\end{align*}
+
+Since $x \in \mathcal{L}_1, \langle x \;,\; y_1 \rangle \in \Z$. Similarly, since $x \in \mathcal{L}_2, <x, y_2> \in \Z$.
+Therefore,
+\[\langle x \;,\; y \rangle \in \Z 
+\Rightarrow x \in \widehat{\hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}} \Rightarrow \mathcal{L}_1 \cap \mathcal{L}_2 \subseteq \widehat{\hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}}\]
+
+Now, let $y \in span(B_1) = span(B_2)$ such that $\forall x \in \widehat{\mathcal{L}_1} + \widehat{\mathcal{L}_2}, \langle x \;,\; y \rangle \in \Z$. Moreover, 
+Let $\alpha_i, \beta_i \in \R$ such that $ y = \sum \alpha_i b_{1i} = \sum \beta_i b_{2i}$. We need to show that $\alpha_i, \beta_i \in Z$.
+
+Assume that $\exists k \in \N$ such that $\alpha_k \notin \Z$. Then,
+
+\begin{align*}
+    \langle y \;,\; d_{1k} \rangle &= \langle \sum \alpha_i b_{1i} \;,\; d_{1k}\rangle \\
+    &= \sum \alpha_i \langle b_{1i} \;,\; d_{1k}\rangle \\
+    &= \alpha_k \notin \Z &(\because <b_{1i}, d_{1k}> = \delta_{ik})
+\end{align*}
+
+But $d_{1k} \in \widehat{\mathcal{L}_1} \Rightarrow d_{1k} \widehat{\mathcal{L}_1} + \widehat{\mathcal{L}_2} \Rightarrow <y, d_{1k}> \in \Z$.
+
+Therefore, by contradiction, all $\alpha_i \in \Z$. By a similar argument, all $\beta_i \in \Z$. Hence: 
+
+\begin{align*}
+    &y \in \mathcal{L}_1 \text{ and }y \in \mathcal{L}_2 \\
+    \Rightarrow &y \in \mathcal{L}_1 \cap \mathcal{L}_2 \\
+    \Rightarrow &\widehat{\hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}} \subseteq \mathcal{L}_1 \cap \mathcal{L}_2
+\end{align*}
+
+Hence, $\widehat{\hat{\mathcal{L}_1} + \hat{\mathcal{L}_2}} = \mathcal{L}_1 \cap \mathcal{L}_2$
+
+\hfill $\blacksquare$
+
+\subsubsection*{Proof of Claims}
+\textbf{1. } Define $D = B(B^TB)^{-1}$. Notice that $B^TB$ will be invertible because B is a matrix of linearly independant vectors. Then, $D^TB = (B(B^TB)^{-1})^TB =  (B^TB)^{-1}B^TB = I$.
+Therefore, $\forall 1 \le i, j \le n:  \langle b_i \;,\; d_j \rangle = \delta_{ij}$.
+
+Now to show that D is a basis for $\widehat{\mathcal{L}(B)}$, we show that $\mathcal{L}(D) = \widehat{\mathcal{L}(B)}$.
+
+$\forall i$ and $\forall x = \sum a_j b_j \in \mathcal{L}(B), a_i \in \Z$, we have
+\begin{align*}
+    \langle d_i \;, \; x \rangle &= \langle d_i \;, \; \sum a_j b_j \rangle \\
+    &= \sum a_i \langle d_i \;,\; b_j \rangle \\
+    &= a_i \in \Z
+\end{align*}
+
+Therefore, all $d_i \in \widehat{{\mathcal{L}(B)}}$.
+
+Now to show that $\widehat{{\mathcal{L}(B)}}$ is closed under integer linear combinations, let $x, y \in \widehat{{\mathcal{L}(B)}}$ and $\alpha, \beta \in \Z$. Then,
+
+\begin{align*}
+    \forall v \in \widehat{{\mathcal{L}(B)}}, \langle \alpha x + \beta y \;, \; v \rangle &= \alpha \langle x\;, \; v \rangle + \beta \langle y \;, \; v \rangle \in \Z
+\end{align*}
+
+Therefore, $\widehat{{\mathcal{L}(B)}}$ is closed under integer linear combinations, and $\widehat{{\mathcal{L}(D)}} \subseteq \widehat{{\mathcal{L}(B)}}$.
+
+Let $x \in \widehat{{\mathcal{L}(B)}}$. Since $span(B) = span(D)$, let $\beta_i \in \R$ such that $x = \sum \beta_j d_j$. Assume towards contradiction that there exists an index $k^*$ such that $\beta_{k^*} \notin \Z$. Then,
+
+\begin{align*}
+    \langle x \;, \; b_{k^*} \rangle &= \langle \sum \beta_j d_j, b_{k^*} \rangle \\
+    &= \sum \beta_j \langle d_j \;, \; b_{k^*} \rangle \\
+    &= \beta_j \notin \Z
+\end{align*}
+
+Which is a contradiction since $x \in \widehat{{\mathcal{L}(B)}}$. Hence, $\forall j, \beta_j \in \Z \Rightarrow x \in {\mathcal{L}(D)}$. Hence, $\widehat{{\mathcal{L}(B)}} = \mathcal{L}(D)$.
+
+\hfill $\blacksquare$
+
+\textbf{2. } Let D be a basis for $\widehat{\mathcal{L}(B)}$ satisfying claim 1. Due to the proof in claim 1, to show that $\mathcal{L}(B) = \widehat{\widehat{\mathcal{L}(B)}}$, it is enough to show that $D (D^TD)^{-1} = B$. Indeed:
+
+\begin{align*}
+    D^TD &= \left(B (B^TB)^{-1}\right)^T B(B^TB)^{-1} \\
+    &= (B^TB)^{-1} B^T B (B^TB)^{-1} \\
+    &= (B^TB)^{-1} \\
+    \Rightarrow D (D^TD)^{-1} &= D \left((B^TB)^{-1}\right)^{-1} \\
+    &= B (B^TB)^{-1} (B^TB) \\
+    &= B
+\end{align*}
+
+\hfill $\blacksquare$
+
+\subsubsection*{Acknowledgement: }
+Lecture Notes by Oded Regev, Tel Aviv University Fall 2004 - Lecture 8 of Lattices in Computer Science - Dual Lattices. -  \href{https://cims.nyu.edu/~regev/teaching/lattices\_fall\_2004/ln/DualLattice.pdf}{https://cims.nyu.edu/~regev/teaching/lattices\_fall\_2004/ln/DualLattice.pdf}
